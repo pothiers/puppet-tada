@@ -5,7 +5,9 @@ class tada::valley::config (
   $logging_conf = hiera('tada_logging_conf'),
   $irodsdata    = hiera('irodsdata'),
   $irodsenv     = hiera('irodsenv'),
-
+  $rsyncdscr    = hiera('rsyncdscr'),
+  $rsyncdconf   = hiera('rsyncdconf'),
+  $cupsclient   = hiera('cupsclient'),
   ) {
   
   file { [ '/var/tada/mountain-mirror', '/var/tada/noarchive']:
@@ -27,12 +29,12 @@ class tada::valley::config (
   ##############################################################################
   ### rsync
   file {  $secrets:
-    source => "${confdir}/rsyncd.scr",
+    source => "$rsyncdscr",
     owner  => 'root',
     mode   => '0400',
   }
   file {  '/etc/rsyncd.conf':
-    source => "${confdir}/rsyncd.conf",
+    source => "$rsyncdconf",
     owner  => 'root',
     mode   => '0400',
   }
@@ -82,8 +84,7 @@ class tada::valley::config (
   ###
   # CUPS (client only)
   file { '/etc/cups/client.conf':
-    source  => "${confdir}/client.conf",
+    source  => "$cupsclient",
   } 
-
 
   }
