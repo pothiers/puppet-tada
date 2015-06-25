@@ -1,30 +1,37 @@
-pp
-pp2
-tt
-uu
 
-.bundle
-Gemfile.lock
-*.orig
-*.patch
-pkg/
-*.rej
-.rspec_system/
-spec/fixtures/manifests/
-spec/fixtures/modules/
-*.swp
-.vagrant
-.tmp
-tmp
-.librarian
-Puppetfile.lock
+*.gem
+*.rbc
+/.config
+/coverage/
+/InstalledFiles
+/pkg/
+/spec/reports/
+/test/tmp/
+/test/version_tmp/
+/tmp/
 
-#####################
-# Backup files
-#
-*~
-\#*\#
-.\#*
-OBSOLETE/
+## Specific to RubyMotion:
+.dat*
+.repl_history
+build/
 
-graphs/
+## Documentation cache and generated files:
+/.yardoc/
+/_yardoc/
+/doc/
+/rdoc/
+
+## Environment normalisation:
+/.bundle/
+/vendor/bundle
+/lib/bundler/man/
+
+# for a library or gem, you might want to ignore these files since the code is
+# intended to run in multiple environments; otherwise, check them in:
+# Gemfile.lock
+# .ruby-version
+# .ruby-gemset
+
+# unless supporting rvm < 1.11.0 or doing something fancy, ignore this:
+.rvmrc
+
