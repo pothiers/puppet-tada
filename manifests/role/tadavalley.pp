@@ -1,5 +1,5 @@
 class sdm::role::tadavalley {
-  $vers=1
+  $vers=2
   notify {"DBG: client loading role::tadavalley STUB-$vers}":}
   #!include ::sdm::profile::base
   #!include ::sdm::site::tu

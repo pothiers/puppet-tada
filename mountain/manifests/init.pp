@@ -1,4 +1,4 @@
-# Intended for provisioning of: mountain
+s# Intended for provisioning of: mountain
 
 
 # Following is attempt to get around the warning:
@@ -12,12 +12,6 @@ Package {
   allow_virtual => false,
 }
 
-
-
-# epel is not needed by the puppet redis module but it's nice to have it
-# already configured in the box
-# (epel:: Extra Repository for Enterprise Linux)
-include epel
 include augeas
 
 yumrepo { 'ius':
