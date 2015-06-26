@@ -1,0 +1,12 @@
+---
+:backends:
+  - yaml
+:hierarchy:
+  - "%{::clientcert}"
+  - "%{::environment}"
+  - defaults
+:yaml:
+  :datadir: /vagrant/hieradata
+
+
+

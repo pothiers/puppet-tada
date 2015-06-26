@@ -1,0 +1,4 @@
+---
+queuename: 'submit'
+irodsdata: '/sandbox/demo/conf/iinit.in'
+
