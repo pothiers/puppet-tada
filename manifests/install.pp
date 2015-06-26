@@ -3,10 +3,14 @@
 # https://docs.puppetlabs.com/guides/module_guides/bgtm.html
 
 class tada::install {
+  # these are also given by: puppet-sdm
   #!include epel
-  include augeas
+  #!package { ['git', ]: }
+  ensure_resource('package', ['git', ], {'ensure' -> 'present'})
 
-  package { ['cups', 'xinetd', 'git'] : }
+  include augeas
+             
+  package { ['cups', 'xinetd'] : }
   package { ['python34u-pip']: }
   yumrepo { 'ius':
     descr      => 'ius - stable',
