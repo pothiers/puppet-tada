@@ -33,7 +33,7 @@ class tada::config {
     mode   => '0766',
   }
   file { '/etc/tada/requirements.txt':
-    source => 'puppet:///tada/requirements.txt',
+    source => 'puppet:///modules/tada/requirements.txt',
     }
 
   }
