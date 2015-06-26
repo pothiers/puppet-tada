@@ -6,10 +6,10 @@ class tada::install {
   # these are also given by: puppet-sdm
   #!include epel
   #!package { ['git', ]: }
-  ensure_resource('package', ['git', ], {'ensure' -> 'present'})
+  ensure_resource('package', ['git', ], {'ensure' => 'present'})
 
   include augeas
-             
+              
   package { ['cups', 'xinetd'] : }
   package { ['python34u-pip']: }
   yumrepo { 'ius':
