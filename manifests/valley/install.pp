@@ -3,7 +3,7 @@
 # https://docs.puppetlabs.com/guides/module_guides/bgtm.html
 
 class tada::valley::install (
-  $irodstgz    = hiera('irodstgz', '/vagrant/valley/files/irods-3.3.1.tgz')
+  $irodstgz    = hiera('irodstgz', 'puppet:///tada/irods-3.3.1.tgz')
   ) {
   file { '/usr/local/share/applications/irods-3.3.1.tgz':
     ensure => present,

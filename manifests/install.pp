@@ -31,10 +31,10 @@ class tada::install {
       ensure => 'link',
       target => '/usr/bin/pip3.4',
     } 
-    python::requirements { '/vagrant/requirements.txt': } 
+    python::requirements { 'puppet:///tada/requirements.txt': } 
     
     Class['python'] -> Package['python34u-pip'] -> File['/usr/bin/pip']
-    -> Python::Requirements['/vagrant/requirements.txt']
+    -> Python::Requirements['puppet:///tada/requirements.txt']
 
     class { 'redis':
       version           => '2.8.19',
