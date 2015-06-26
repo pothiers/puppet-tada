@@ -32,7 +32,7 @@ class tada::mountain::service (
     refreshonly => true,
     require     => [File['/var/run/tada'], Class['redis']],
     subscribe   => [File['/etc/tada/tada.conf'],
-                    Python::Requirements[ 'puppet:///tada/requirements.txt'],
+                    Python::Requirements[ '/etc/tada/requirements.txt'],
                     ],
   }
   

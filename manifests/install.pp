@@ -30,7 +30,8 @@ class tada::install {
     file { '/usr/bin/pip':
       ensure => 'link',
       target => '/usr/bin/pip3.4',
-    } 
+    }
+    
     python::requirements { '/etc/tada/requirements.txt': } 
     
     Class['python'] -> Package['python34u-pip'] -> File['/usr/bin/pip']
