@@ -17,7 +17,7 @@ class tada::valley::service (
                     Exec['iinit'],
                     ],
     subscribe   => [File['/etc/tada/tada.conf'],
-                    Python::Requirements[ 'puppet:///tada/requirements.txt'],
+                    Python::Requirements[ '/etc/tada/requirements.txt'],
                     Exec['iinit'],
                     ],
   }
