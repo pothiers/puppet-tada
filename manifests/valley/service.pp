@@ -1,6 +1,6 @@
 class tada::valley::service (
   $dqlevel  = hiera('dq_loglevel', 'WARNING'),
-  $qname    = hiera('queuename'),
+  $qname    = hiera('qname'),
   $dqlog    = hiera('dqlog'),
   ) {
 
