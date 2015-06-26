@@ -32,5 +32,8 @@ class tada::config {
     owner  => 'tada',
     mode   => '0766',
   }
+  file { '/etc/tada/requirements.txt':
+    source => 'puppet:///tada/requirements.txt',
+    }
 
   }
