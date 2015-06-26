@@ -3,7 +3,7 @@
 # https://docs.puppetlabs.com/guides/module_guides/bgtm.html
 
 class tada::install {
-  include epel
+  #!include epel
   include augeas
 
   package { ['cups', 'xinetd', 'git'] : }
