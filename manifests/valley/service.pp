@@ -21,8 +21,6 @@ class tada::valley::service (
                     Exec['iinit'],
                     ],
   }
-
-  
   
 }
 
