@@ -4,8 +4,7 @@ class tada::valley::service (
   $dqlog    = hiera('dqlog'),
   ) {
 
-  python::requirements { '/etc/tada/requirements.txt': }   
-  -> exec { 'dqsvcpop':
+  exec { 'dqsvcpop':
     command     => "/usr/bin/dqsvcpop --loglevel ${dqlevel} --queue ${qname} > ${dqlog} 2>&1 &",
     cwd         => '/home/tada',
     environment => 'HOME=/home/tada',
