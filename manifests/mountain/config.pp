@@ -15,6 +15,11 @@ class tada::mountain::config (
     mode   => '0777',
     owner  => 'tada',
   }
+  file { '/var/tada/mountain_stash':
+    ensure => 'directory',
+    mode   => '0777',
+    owner  => 'tada',
+  }
 
   firewall { '631 allow cups':
     chain   => 'INPUT',
