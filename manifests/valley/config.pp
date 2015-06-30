@@ -1,3 +1,6 @@
+# Resources related to configuring the installed software 
+# https://docs.puppetlabs.com/guides/module_guides/bgtm.html
+
 class tada::valley::config (
   $secrets      = '/etc/rsyncd.scr',
   $icmdpath     = '/usr/local/share/applications/irods3.3.1/iRODS/clients/icommands/bin',

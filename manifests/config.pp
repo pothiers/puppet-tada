@@ -5,8 +5,6 @@
 class tada::config {
   $logging_conf=hiera('tada_logging_conf')
   $tada_conf=hiera('tada_conf')
-
-  notify {"DBG: config.pp; tada_conf=$tada_conf":}
   
   user { 'tada' :
     ensure     => 'present',

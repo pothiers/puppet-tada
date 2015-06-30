@@ -11,18 +11,16 @@ class tada::valley::service (
     user        => 'tada',
     umask       => '000',
     creates     => '/var/run/tada/dqsvcpop.pid',
-    refreshonly => true,
+    #! refreshonly => true,
     require     => [File['/var/run/tada'],
                     Class['redis'],
                     Exec['iinit'],
+                    Python::Requirements[ '/etc/tada/requirements.txt'],
                     ],
     subscribe   => [File['/etc/tada/tada.conf'],
-                    Python::Requirements[ '/etc/tada/requirements.txt'],
                     Exec['iinit'],
                     ],
   }
-
-  
   
 }
 
