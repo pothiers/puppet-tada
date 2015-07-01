@@ -11,7 +11,6 @@ class tada::install {
   include augeas
               
   package { ['cups', 'xinetd'] : }
-  package { ['python34u-pip']: }
   yumrepo { 'ius':
     descr      => 'ius - stable',
     baseurl    => 'http://dl.iuscommunity.org/pub/ius/stable/CentOS/6/x86_64/',
@@ -21,11 +20,12 @@ class tada::install {
     mirrorlist => absent,
     } -> Package<| provider == 'yum' |>
     
+    package { ['python34u-pip']: }
     class { 'python':
       version    => '34u',
       pip        => false,
       dev        => true,
-      virtualenv => true,
+      #!virtualenv => true,
     } 
     file { '/usr/bin/pip':
       ensure => 'link',
