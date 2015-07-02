@@ -43,7 +43,7 @@ class tada::install {
     }
 
     vcsrepo { '/opt/tada-cli' :
-      ensure   => present,
+      ensure   => latest,
       provider => git,
       source   => 'https://github.com/pothiers/tada-cli.git',
     }
