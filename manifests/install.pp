@@ -42,7 +42,11 @@ class tada::install {
       redis_max_memory  => '1gb',
     }
 
-    
+    vcsrepo { '/opt/tada-cli' :
+      ensure   => present,
+      provider => git,
+      source   => 'https://github.com/pothiers/tada-cli.git',
+    }
 }
 
 
