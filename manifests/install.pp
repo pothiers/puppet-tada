@@ -46,6 +46,7 @@ class tada::install {
       ensure   => latest,
       provider => git,
       source   => 'https://github.com/pothiers/tada-cli.git',
+      revision => 'master',
     }
 }
 
