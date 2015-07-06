@@ -32,7 +32,9 @@ class tada::install {
       target => '/usr/bin/pip3.4',
     }
     
-    python::requirements { '/etc/tada/requirements.txt': } 
+    python::requirements { '/etc/tada/requirements.txt':
+      owner => 'root'
+    } 
     
     Class['python'] -> Package['python34u-pip'] -> File['/usr/bin/pip']
     -> Python::Requirements['/etc/tada/requirements.txt']
