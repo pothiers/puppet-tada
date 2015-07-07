@@ -25,7 +25,6 @@ class tada::install {
       version    => '34u',
       pip        => false,
       dev        => true,
-      #!virtualenv => true,
     } 
     file { '/usr/bin/pip':
       ensure => 'link',
@@ -33,7 +32,7 @@ class tada::install {
     }
     
     python::requirements { '/etc/tada/requirements.txt':
-      owner => 'root'
+      owner => 'root',
     } 
     
     Class['python'] -> Package['python34u-pip'] -> File['/usr/bin/pip']
