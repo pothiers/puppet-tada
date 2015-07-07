@@ -1,5 +1,6 @@
 OBSOLETE/
 
+*~
 *.gem
 *.rbc
 /.config

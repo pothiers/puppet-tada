@@ -10,8 +10,13 @@ class tada::valley::config (
   $rsyncdscr    = hiera('rsyncdscr'),
   $rsyncdconf   = hiera('rsyncdconf'),
   $cupsclient   = hiera('cupsclient'),
+  $dqd_conf=hiera('dqd_submit_conf')
   ) {
   
+  file {  '/etc/tada/dqd.conf':
+    source => "${dqd_conf}",
+  }
+
   file { [ '/var/tada/mountain-mirror', '/var/tada/noarchive']:
     ensure => 'directory',
     owner  => 'tada',

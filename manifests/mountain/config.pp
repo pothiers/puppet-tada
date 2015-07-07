@@ -8,7 +8,12 @@ class tada::mountain::config (
   $astropost       = hiera('astropost'),
   $rsyncpwd        = hiera('rsyncpwd'),
   $mtncache        = hiera('mtncache', '/var/tada/mountain_cache'),
+  $dqd_conf=hiera('dqd_transfer_conf')
   ) {
+
+  file {  '/etc/tada/dqd.conf':
+    source => "${dqd_conf}",
+  }
 
   file { "$mtncache":
     ensure => 'directory',
