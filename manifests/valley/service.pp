@@ -25,6 +25,7 @@ class tada::valley::service (
   service { 'dqd':
     ensure    => 'running',
     provider  => 'redhat',
+    path = '/etc/init.d',
   }
   
 }

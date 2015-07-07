@@ -25,17 +25,24 @@ class tada::mountain::service (
   }
 
   
-  Python::Requirements['/etc/tada/requirements.txt'] ->
-  exec { 'dqsvcpop':
-    command     => "/usr/bin/dqsvcpop --loglevel ${dqlevel} --queue ${qname} > ${dqlog} 2>&1 &",
-    user        => 'tada',
-    umask       => '000',
-    creates     => '/var/run/tada/dqsvcpop.pid',
-    refreshonly => true,
-    require     => [File['/var/run/tada'], Class['redis']],
-    subscribe   => [File['/etc/tada/tada.conf'],
-                    Python::Requirements[ '/etc/tada/requirements.txt'],
-                    ],
+  #!Python::Requirements['/etc/tada/requirements.txt'] ->
+  #!exec { 'dqsvcpop':
+  #!  command     => "/usr/bin/dqsvcpop --loglevel ${dqlevel} --queue ${qname} > ${dqlog} 2>&1 &",
+  #!  user        => 'tada',
+  #!  umask       => '000',
+  #!  creates     => '/var/run/tada/dqsvcpop.pid',
+  #!  refreshonly => true,
+  #!  require     => [File['/var/run/tada'], Class['redis']],
+  #!  subscribe   => [File['/etc/tada/tada.conf'],
+  #!                  Python::Requirements[ '/etc/tada/requirements.txt'],
+  #!                  ],
+  #!}
+
+  service { 'dqd':
+    ensure    => 'running',
+    provider  => 'redhat',
+    path = '/etc/init.d',
   }
+
   
 }
