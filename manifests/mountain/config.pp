@@ -12,7 +12,7 @@ class tada::mountain::config (
   ) {
 
   file {  '/etc/tada/dqd.conf':
-    source => "${dqd_conf}",
+    source => 'puppet:///modules/tada/dqd.transfer.conf',
   }
 
   file { "$mtncache":
