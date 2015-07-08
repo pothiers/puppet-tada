@@ -35,7 +35,7 @@ class tada::config {
     }
   file { '/etc/init.d/dqd':
     source => 'puppet:///modules/tada/dqd',
-    owner  => 'tada',
+    #!owner  => 'tada',
     mode   => '0777',
     } 
 
