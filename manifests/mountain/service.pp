@@ -38,11 +38,15 @@ class tada::mountain::service (
   #!                  ],
   #!}
 
-  service { 'dqd':
-    ensure    => 'running',
-    provider  => 'redhat',
-    path = '/etc/init.d',
-  }
 
+  service { 'dqd':
+    require  => [File ['/etc/tada/dqd.conf', '/etc/init.d/dqd'],
+                 Class['redis'],
+                 Python::Requirements[ '/etc/tada/requirements.txt']],
+    ensure   => 'running',
+    enable   => true,
+    provider => 'redhat',
+    path     => '/etc/init.d',
+  }
   
 }
