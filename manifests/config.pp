@@ -32,6 +32,7 @@ class tada::config {
   }
   file { '/etc/tada/requirements.txt':
     source => 'puppet:///modules/tada/requirements.txt',
+    notify =>  Python::Requirements['/etc/tada/requirements.txt'],
     }
   file { '/etc/init.d/dqd':
     source => 'puppet:///modules/tada/dqd',
