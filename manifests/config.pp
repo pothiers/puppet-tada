@@ -37,6 +37,13 @@ class tada::config {
     source => 'puppet:///modules/tada/dqd',
     #!owner  => 'tada',
     mode   => '0777',
-    } 
+  }
+
+  file_line { 'disable_requiretty':
+    path  => '/etc/sudoers',
+    line  => '# Defaults    requiretty',
+    match => '^Defaults    requiretty',
+  }  
+
 
   }
