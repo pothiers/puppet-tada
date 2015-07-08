@@ -24,7 +24,7 @@ class tada::mountain::service (
     subscribe => Service['cups'],
   }
 
-  
+  y
   #!Python::Requirements['/etc/tada/requirements.txt'] ->
   #!exec { 'dqsvcpop':
   #!  command     => "/usr/bin/dqsvcpop --loglevel ${dqlevel} --queue ${qname} > ${dqlog} 2>&1 &",
