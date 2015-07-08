@@ -41,8 +41,8 @@ class tada::config {
 
   file_line { 'disable_requiretty':
     path  => '/etc/sudoers',
-    line  => '# Defaults    requiretty',
-    match => '^Defaults    requiretty',
+    line  => '#Defaults    requiretty',
+    match => 'Defaults    requiretty',
   }  
 
 
