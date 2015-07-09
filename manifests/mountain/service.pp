@@ -6,9 +6,9 @@
 class tada::mountain::service (
   $printer  = 'astro',
   $mtncache = hiera('mtncache', '/var/tada/mountain_cache'),
-  #!$dqlevel  = hiera('dq_loglevel', 'WARNING'),
-  #!$qname    = hiera('qname'),
-  #!$dqlog    = hiera('dqlog'),
+  $dqlevel  = hiera('dq_loglevel', 'WARNING'),
+  $qname    = hiera('qname'),
+  $dqlog    = hiera('dqlog'),
   ) {
   service { 'cups':
     ensure  => 'running',

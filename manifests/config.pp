@@ -16,10 +16,13 @@ class tada::config {
   file { [ '/var/run/tada', '/var/log/tada', '/etc/tada', '/var/tada']:
     ensure => 'directory',
     owner  => 'tada',
+    group  => 'root',
+    mode   => '0774',
   }
   file {  '/etc/tada/tada.conf':
     source => "${tada_conf}",
-    #! mode   => '0744',
+    group  => 'root',
+    #! mode   => '0774',
   }
   file { '/etc/tada/pop.yaml':
     source => "${logging_conf}",
