@@ -3,6 +3,8 @@
 # https://docs.puppetlabs.com/guides/module_guides/bgtm.html
 
 class tada::install {
+  $date=strftime("%Y-%m-%d")
+  
   # these are also given by: puppet-sdm
   #! include epel
   #!package { ['git', ]: }
@@ -32,9 +34,12 @@ class tada::install {
     }
     
     python::requirements { '/etc/tada/requirements.txt':
-      owner => 'root',
+      owner  => 'root',
       notify => Service['dqd'],
-    } 
+      } ->
+      file { '/etc/tada/tada-installed.date' :
+        content => "${date}\n",
+      }
     
     Class['python'] -> Package['python34u-pip'] -> File['/usr/bin/pip']
     -> Python::Requirements['/etc/tada/requirements.txt'] -> Service['dqd']

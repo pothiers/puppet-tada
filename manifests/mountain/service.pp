@@ -41,6 +41,7 @@ class tada::mountain::service (
   service { 'dqd':
     require  => [File ['/etc/tada/dqd.conf', '/etc/init.d/dqd'],
                  Class['redis'],
+                 File ['/etc/tada/tada-installed.date'],
                  Python::Requirements[ '/etc/tada/requirements.txt']],
     ensure   => 'running',
     enable   => true,
