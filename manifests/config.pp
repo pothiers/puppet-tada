@@ -5,6 +5,7 @@
 class tada::config {
   $logging_conf=hiera('tada_logging_conf')
   $tada_conf=hiera('tada_conf')
+  $date=strftime("%Y=%m-%d")
   
   user { 'tada' :
     ensure     => 'present',
@@ -19,14 +20,21 @@ class tada::config {
     group  => 'root',
     mode   => '0774',
   }
+  file { ['/var/log/pop.log', '/var/log/pop-detail.log']:
+    content => "$date",
+    owner  => 'tada',
+    group  => 'root',
+    mode   => '0774',
+  }
+
   file {  '/etc/tada/tada.conf':
     source => "${tada_conf}",
     group  => 'root',
-    #! mode   => '0774',
+    mode   => '0774',
   }
   file { '/etc/tada/pop.yaml':
     source => "${logging_conf}",
-    #! mode   => '0744',
+    mode   => '0774',
   }
   file { '/var/log/tada/submit.manifest':
     ensure => 'file',
@@ -47,7 +55,6 @@ class tada::config {
     path  => '/etc/sudoers',
     line  => '#Defaults    requiretty',
     match => 'Defaults    requiretty',
-  }  
-
+  }
 
   }
