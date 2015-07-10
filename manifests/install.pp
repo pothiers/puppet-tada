@@ -37,7 +37,7 @@ class tada::install {
     } 
     
     Class['python'] -> Package['python34u-pip'] -> File['/usr/bin/pip']
-    -> Python::Requirements['/etc/tada/requirements.txt']
+    -> Python::Requirements['/etc/tada/requirements.txt'] -> Service['dqd']
 
     class { 'redis':
       version           => '2.8.19',
