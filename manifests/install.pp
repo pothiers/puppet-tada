@@ -31,7 +31,10 @@ class tada::install {
     file { '/usr/bin/pip':
       ensure => 'link',
       target => '/usr/bin/pip3.4',
-    }
+      } ->
+      exec { 'upgrade-pip':
+        command  => '/usr/bin/pip3.4 install --upgrade pip'
+      }
     
     python::requirements { '/etc/tada/requirements.txt':
       owner  => 'root',
