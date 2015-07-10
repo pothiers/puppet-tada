@@ -5,7 +5,7 @@
 class tada::config {
   $logging_conf=hiera('tada_logging_conf')
   $tada_conf=hiera('tada_conf')
-  $date=strftime("%Y=%m-%d")
+  $date=strftime("%Y-%m-%d")
   
   user { 'tada' :
     ensure     => 'present',
@@ -20,8 +20,8 @@ class tada::config {
     group  => 'root',
     mode   => '0774',
   }
-  file { ['/var/log/pop.log', '/var/log/pop-detail.log']:
-    content => "$date",
+  file { ['/var/log/tada/pop.log', '/var/log/tada/pop-detail.log']:
+    content => "${date}\n",
     owner  => 'tada',
     group  => 'root',
     mode   => '0774',
