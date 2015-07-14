@@ -43,9 +43,17 @@ class tada::install {
       file { '/etc/tada/tada-installed.date' :
         content => "${stamp}\n",
       }
+
+   # python:requirements gets error sometimes!
+   exec { 'install-python-packages' :
+     command => 'pip install -r /etc/tada/requirements.txt',
+   }
+      
     
     Class['python'] -> Package['python34u-pip'] -> File['/usr/bin/pip']
-    -> Python::Requirements['/etc/tada/requirements.txt'] -> Service['dqd']
+   -> Python::Requirements['/etc/tada/requirements.txt']
+   -> Exec['install-python-packages']
+   -> Service['dqd']
 
     class { 'redis':
       version           => '2.8.19',
