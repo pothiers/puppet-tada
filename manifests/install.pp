@@ -46,7 +46,7 @@ class tada::install {
 
    # python:requirements gets error sometimes!
    exec { 'install-python-packages' :
-     command => 'pip install -r /etc/tada/requirements.txt',
+     command => '/usr/bin/pip install -r /etc/tada/requirements.txt',
    }
       
     
