@@ -31,28 +31,19 @@ class tada::install {
     file { '/usr/bin/pip':
       ensure => 'link',
       target => '/usr/bin/pip3.4',
-      } ->
-      exec { 'upgrade-pip':
-        command  => '/usr/bin/pip3.4 install --upgrade pip'
-      }
+    }
+    #!->
+    #!exec { 'upgrade-pip':
+    #!  command  => '/usr/bin/pip3.4 install --upgrade pip'
+    #!}
     
     python::requirements { '/etc/tada/requirements.txt':
       owner  => 'root',
-      notify => Service['dqd'],
-      } ->
-      file { '/etc/tada/tada-installed.date' :
-        content => "${stamp}\n",
-      }
-
-   # python:requirements gets error sometimes!
-   exec { 'install-python-packages' :
-     command => '/usr/bin/pip install -r /etc/tada/requirements.txt',
-   }
-      
+    }
     
     Class['python'] -> Package['python34u-pip'] -> File['/usr/bin/pip']
    -> Python::Requirements['/etc/tada/requirements.txt']
-   -> Exec['install-python-packages']
+   -> Package['dataq', 'tada'] ->
    -> Service['dqd']
 
     class { 'redis':

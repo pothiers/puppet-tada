@@ -44,16 +44,16 @@ class tada::valley::config (
     owner  => 'root',
     mode   => '0400',
   }
-  exec { 'rsyncd':
-    command   => "/sbin/chkconfig rsync on",
-    require   => [Service['xinetd'],],
-    subscribe => File['/etc/rsyncd.conf'],
-  }
   service { 'xinetd':
     ensure  => 'running',
     enable  => true,
     require => Package['xinetd'],
     }
+  exec { 'rsyncd':
+    command   => "/sbin/chkconfig rsync on",
+    require   => [Service['xinetd'],],
+    subscribe => File['/etc/rsyncd.conf'],
+  }
   
   firewall { '000 allow rsync':
     chain   => 'INPUT',

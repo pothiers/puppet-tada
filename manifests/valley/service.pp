@@ -1,32 +1,11 @@
-class tada::valley::service (
-  $dqlevel  = hiera('dq_loglevel', 'WARNING'),
-  $qname    = hiera('qname'),
-  $dqlog    = hiera('dqlog'),
-  ) {
-
-  #!exec { 'dqsvcpop':
-  #!  command     => "/usr/bin/dqsvcpop --loglevel ${dqlevel} --queue ${qname} > ${dqlog} 2>&1 &",
-  #!  cwd         => '/home/tada',
-  #!  environment => 'HOME=/home/tada',
-  #!  user        => 'tada',
-  #!  umask       => '000',
-  #!  creates     => '/var/run/tada/dqsvcpop.pid',
-  #!  #! refreshonly => true,
-  #!  require     => [File['/var/run/tada'],
-  #!                  Class['redis'],
-  #!                  Exec['iinit'],
-  #!                  Python::Requirements[ '/etc/tada/requirements.txt'],
-  #!                  ],
-  #!  subscribe   => [File['/etc/tada/tada.conf'],
-  #!                  Exec['iinit'],
-  #!                  ],
-  #!}
-
+class tada::valley::service {
   service { 'dqd':
-    require  => [File ['/etc/tada/dqd.conf', '/etc/init.d/dqd'],
-                 Class['redis'],
-                 File [ '/etc/tada/tada-installed.date'],
-                 Python::Requirements[ '/etc/tada/requirements.txt']],
+    subscribe => [File ['/etc/tada/dqd.conf', '/etc/init.d/dqd'],
+                  Class['redis'],
+                  File [ '/etc/tada/tada-installed.date'],
+                  Python::Requirements[ '/etc/tada/requirements.txt'],
+                  Package['dataq', 'tada'],
+                  ],
     ensure   => 'running',
     enable   => true,
     provider => 'redhat',
