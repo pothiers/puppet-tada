@@ -5,13 +5,18 @@
 class tada::install {
   $stamp=strftime("%Y-%m-%d %H:%M:%S")
   
+  #!exec { 'upgrade-pip':
+  #!  command  => '/usr/bin/pip3.4 install --upgrade pip'
+  #!}
+  
+
   # these are also given by: puppet-sdm
-  #! include epel
+  include epel
   #!package { ['git', ]: }
   ensure_resource('package', ['git', ], {'ensure' => 'present'})
-
+  
   include augeas
-              
+  
   package { ['cups', 'xinetd'] : }
   yumrepo { 'ius':
     descr      => 'ius - stable',
@@ -20,43 +25,52 @@ class tada::install {
     gpgcheck   => 0,
     priority   => 1,
     mirrorlist => absent,
-    } -> Package<| provider == 'yum' |>
-    
-    package { ['python34u-pip']: }
-    class { 'python':
-      version    => '34u',
-      pip        => false,
-      dev        => true,
-    } 
-    file { '/usr/bin/pip':
-      ensure => 'link',
-      target => '/usr/bin/pip3.4',
-    }
-    #!->
-    #!exec { 'upgrade-pip':
-    #!  command  => '/usr/bin/pip3.4 install --upgrade pip'
-    #!}
-    
-    python::requirements { '/etc/tada/requirements.txt':
-      owner  => 'root',
-    }
-    
-    Class['python'] -> Package['python34u-pip'] -> File['/usr/bin/pip']
-   -> Python::Requirements['/etc/tada/requirements.txt']
-   -> Package['dataq', 'tada'] ->
-   -> Service['dqd']
+  }
+  -> Package<| provider == 'yum' |>
 
-    class { 'redis':
-      version           => '2.8.19',
-      redis_max_memory  => '1gb',
-    }
+  yumrepo { 'tada':
+    descr    => 'tada',
+    baseurl  => "http://mirrors.sdm.noao.edu/tada",
+    enabled  => 1,
+    gpgcheck => 0,
+    priority => 1,
+    mirrorlist => absent,
+  }
+  -> Package<| provider == 'yum' |>
 
-    vcsrepo { '/opt/tada-cli' :
-      ensure   => latest,
-      provider => git,
-      source   => 'https://github.com/pothiers/tada-cli.git',
-      revision => 'master',
-    }
+  
+  package { ['python34u-pip']: }
+  class { 'python':
+    version    => '34u',
+    pip        => false,
+    dev        => true,
+  } 
+  file { '/usr/bin/pip':
+    ensure => 'link',
+    target => '/usr/bin/pip3.4',
+  }
+
+  python::requirements { '/etc/tada/requirements.txt':
+    owner  => 'root',
+  } 
+  package{ ['dataq', 'tada'] : }
+  
+  Class['python'] -> Package['python34u-pip'] -> File['/usr/bin/pip']
+  -> Python::Requirements['/etc/tada/requirements.txt']
+  -> Package['dataq', 'tada'] 
+  -> Service['dqd']
+  
+  class { 'redis':
+    version           => '2.8.19',
+    redis_max_memory  => '1gb',
+  }
+  
+  vcsrepo { '/opt/tada-cli' :
+    ensure   => latest,
+    provider => git,
+    source   => 'https://github.com/pothiers/tada-cli.git',
+    revision => 'master',
+  }
 }
 
 

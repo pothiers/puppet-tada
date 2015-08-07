@@ -64,5 +64,10 @@ class tada::mountain::config (
     owner  => 'tada',
   } 
 
-  
+  cron { tada_mountain_metrics:
+    command => "/opt/tada-cli/scripts/gmetrics-tada.sh MOUNTAIN",
+    user    => root,
+    minute  => '*/10',
+  }
+
   }

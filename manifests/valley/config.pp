@@ -91,6 +91,12 @@ class tada::valley::config (
   # CUPS (client only)
   file { '/etc/cups/client.conf':
     source  => "$cupsclient",
-  } 
+  }
+
+  cron { tada_valley_metrics:
+    command => "/opt/tada-cli/scripts/gmetrics-tada.sh VALLEY",
+    user    => root,
+    minute  => '*/10',
+  }
 
   }
