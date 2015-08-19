@@ -2,7 +2,10 @@
 # the module manages onto the node.
 # https://docs.puppetlabs.com/guides/module_guides/bgtm.html
 
-class tada::install {
+class tada::install (
+  $fpacktgz    = hiera('fpacktgz', 'puppet:///modules/tada/fpack-bin-centos-6.6.tgz')
+  ) {
+  
   $stamp=strftime("%Y-%m-%d %H:%M:%S")
   
   #!exec { 'upgrade-pip':
@@ -71,6 +74,18 @@ class tada::install {
     source   => 'https://github.com/pothiers/tada-cli.git',
     revision => 'master',
   }
+
+  file { '/usr/local/share/applications/fpack.tgz':
+    ensure => present,
+    source => "$fpacktgz",
+    notify => Exec['unpack fpack'],
+  } 
+  exec { 'unpack fpack':
+    command     => '/bin/tar -xf /usr/local/share/applications/fpack.tgz',
+    cwd         => '/usr/local/bin',
+    refreshonly => true,
+  }
+  
 }
 
 
