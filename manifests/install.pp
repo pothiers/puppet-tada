@@ -1,6 +1,3 @@
-# Should contain all of the resources related to getting the software
-# the module manages onto the node.
-# https://docs.puppetlabs.com/guides/module_guides/bgtm.html
 
 class tada::install (
   $fpacktgz    = hiera('fpacktgz', 'puppet:///modules/tada/fpack-bin-centos-6.6.tgz')
@@ -55,7 +52,7 @@ class tada::install (
 
   python::requirements { '/etc/tada/requirements.txt':
     owner  => 'root',
-  } 
+  }
   package{ ['dataq', 'tada'] : }
   
   Class['python'] -> Package['python34u-pip'] -> File['/usr/bin/pip']
