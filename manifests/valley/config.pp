@@ -13,6 +13,7 @@ class tada::valley::config (
   ) {
   
   file {  '/etc/tada/dqd.conf':
+    ensure     => 'present',
     source => 'puppet:///modules/tada/dqd.submit.conf',
   }
 
@@ -35,11 +36,13 @@ class tada::valley::config (
   ##############################################################################
   ### rsync
   file {  $secrets:
+    ensure     => 'present',
     source => "$rsyncdscr",
     owner  => 'root',
     mode   => '0400',
   }
   file {  '/etc/rsyncd.conf':
+    ensure     => 'present',
     source => "$rsyncdconf",
     owner  => 'root',
     mode   => '0400',
@@ -69,10 +72,12 @@ class tada::valley::config (
     owner  => 'tada',
   }
   file { '/home/tada/.irods/.irodsEnv':
+    ensure     => 'present',
     owner  => 'tada',
     source => "$irodsenv",
     }
   file { '/home/tada/.irods/iinit.in':
+    ensure     => 'present',
     owner  => 'tada',
     source => "$irodsdata",
   }
@@ -90,6 +95,7 @@ class tada::valley::config (
   ###
   # CUPS (client only)
   file { '/etc/cups/client.conf':
+    ensure     => 'present',
     source  => "$cupsclient",
   }
 

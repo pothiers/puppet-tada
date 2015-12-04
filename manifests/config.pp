@@ -21,18 +21,21 @@ class tada::config {
     mode   => '0774',
   }
   file { ['/var/log/tada/pop.log', '/var/log/tada/pop-detail.log']:
-    content => "${date}\n",
+    ensure => 'present',
+    #content => "${date}\n",
     owner  => 'tada',
     group  => 'root',
     mode   => '0774',
   }
 
   file {  '/etc/tada/tada.conf':
+    ensure => 'present',
     source => "${tada_conf}",
     group  => 'root',
     mode   => '0774',
   }
   file { '/etc/tada/pop.yaml':
+    ensure => 'present',
     source => "${logging_conf}",
     mode   => '0774',
   }
@@ -42,9 +45,11 @@ class tada::config {
     mode   => '0766',
   }
   file { '/etc/tada/requirements.txt':
+    ensure => 'present',
     source => 'puppet:///modules/tada/requirements.txt',
     }
   file { '/etc/init.d/dqd':
+    ensure => 'present',
     source => 'puppet:///modules/tada/dqd',
     owner  => 'tada',
     mode   => '0777',

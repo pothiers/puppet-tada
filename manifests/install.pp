@@ -73,7 +73,7 @@ class tada::install (
   }
 
   file { '/usr/local/share/applications/fpack.tgz':
-    ensure => present,
+    ensure => 'present',
     source => "$fpacktgz",
     notify => Exec['unpack fpack'],
   } 

@@ -2,7 +2,6 @@
 # https://docs.puppetlabs.com/guides/module_guides/bgtm.html
 
 class tada::mountain::config (
-
   $cupsdconf       = hiera('cupsdconf'),
   $pushfilesh      = hiera('pushfilesh'),
   $astropost       = hiera('astropost'),
@@ -11,6 +10,7 @@ class tada::mountain::config (
   ) {
 
   file {  '/etc/tada/dqd.conf':
+    ensure     => 'present',
     source => 'puppet:///modules/tada/dqd.transfer.conf',
   }
 
@@ -44,14 +44,17 @@ class tada::mountain::config (
              ensure => directory,
   } 
   file { '/etc/cups/cupsd.conf':
+    ensure     => 'present',
     source => "$cupsdconf" ,
   } 
   file {  '/usr/lib/cups/lib/astro/pushfile.sh':
+    ensure => 'present',
     source => "$pushfilesh",
     mode   => '0555',
     owner  => 'tada',
   } 
   file {  '/usr/lib/cups/backend/astropost':
+    ensure => 'present',
     source => $astropost, 
     mode   => '0700',
     owner  => 'root',
@@ -59,6 +62,7 @@ class tada::mountain::config (
 
   #################
   file { '/etc/tada/rsync.pwd':
+    ensure => 'present',
     source => "$rsyncpwd", 
     mode   => '0400',
     owner  => 'tada',
