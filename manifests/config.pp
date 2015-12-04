@@ -55,11 +55,11 @@ class tada::config {
     mode   => '0777',
   }
 
-  file_line { 'disable_requiretty':
-    path  => '/etc/sudoers',
-    line  => '#Defaults    requiretty',
-    match => 'Defaults    requiretty',
-  }
+#!  file_line { 'disable_requiretty':
+#!    path  => '/etc/sudoers',
+#!    line  => '#Defaults    requiretty',
+#!    match => 'Defaults    requiretty',
+#!  }
 
 #!  class {'ganglia::gmond':
 #!    cluster_name       => 'prod_el6',
