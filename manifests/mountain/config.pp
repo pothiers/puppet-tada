@@ -47,7 +47,7 @@ class tada::mountain::config (
     ensure     => 'present',
     source => "$cupsdconf" ,
     mode   => '0640',
-    group  => 'lp',
+    group  => 'lp', foo,
   } 
   file {  '/usr/lib/cups/lib/astro/pushfile.sh':
     ensure => 'present',
