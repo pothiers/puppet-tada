@@ -55,22 +55,23 @@ class tada::config {
     mode   => '0777',
   }
 
+  ## Use "ssh -t" instead?
 #!  file_line { 'disable_requiretty':
 #!    path  => '/etc/sudoers',
 #!    line  => '#Defaults    requiretty',
 #!    match => 'Defaults    requiretty',
 #!  }
 
-#!  class {'ganglia::gmond':
-#!    cluster_name       => 'prod_el6',
-#!    cluster_owner      => 'National Optical Astronomical Observatory',
-#!    cluster_latlong    => 'N32.2332147 W110.9481163',
-#!    cluster_url        => 'www.noao.edu',
-#!    host_location      => 'NOAO Computer Room',
-#!    udp_recv_channel   => $udp_recv_channel,
-#!    udp_send_channel   => $udp_send_channel,
-#!    tcp_accept_channel => $tcp_accept_channel
-#!  }
+  class {'ganglia::gmond':
+    cluster_name       => 'prod_el6',
+    cluster_owner      => 'National Optical Astronomical Observatory',
+    cluster_latlong    => 'N32.2332147 W110.9481163',
+    cluster_url        => 'www.noao.edu',
+    host_location      => 'NOAO Computer Room',
+    udp_recv_channel   => $udp_recv_channel,
+    udp_send_channel   => $udp_send_channel,
+    tcp_accept_channel => $tcp_accept_channel
+  }
 
 
 }

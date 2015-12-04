@@ -36,13 +36,13 @@ class tada::valley::config (
   ##############################################################################
   ### rsync
   file {  $secrets:
-    ensure     => 'present',
+    ensure => 'present',
     source => "$rsyncdscr",
     owner  => 'root',
     mode   => '0400',
   }
   file {  '/etc/rsyncd.conf':
-    ensure     => 'present',
+    ensure => 'present',
     source => "$rsyncdconf",
     owner  => 'root',
     mode   => '0400',
