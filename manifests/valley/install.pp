@@ -15,5 +15,12 @@ class tada::valley::install (
     cwd         => '/usr/local/share/applications',
     refreshonly => true,
   }
+
+  vcsrepo { '/opt/tada-tools' :
+    ensure   => latest,
+    provider => git,
+    source   => 'https://github.com/pothiers/tada-tools.git',
+    revision => 'master',
+  }
   
 }

@@ -52,11 +52,19 @@ class tada::valley::config (
     enable  => true,
     require => Package['xinetd'],
     }
-  exec { 'rsyncd':
-    command   => "/sbin/chkconfig rsync on",
-    require   => [Service['xinetd'],],
+  #!exec { 'rsyncd':
+  #!  command   => "/sbin/chkconfig rsync on",
+  #!  require   => [Service['xinetd'],],
+  #!  subscribe => File['/etc/rsyncd.conf'],
+  #!}
+  service { 'rsyncd':
     subscribe => File['/etc/rsyncd.conf'],
+    require   => [Service['xinetd'],],
+    ensure   => 'running',
+    enable   => true,
+    provider => 'redhat',
   }
+
   
   firewall { '000 allow rsync':
     chain   => 'INPUT',

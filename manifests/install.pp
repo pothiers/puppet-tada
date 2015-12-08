@@ -47,8 +47,7 @@ class tada::install (
 #!    mirrorlist => absent,
 #!  }
 #!  -> Package<| provider == 'yum' |>
-package { ['mcollective-facter-facts'] : }
-  
+ensure_resource('package', ['mcollective-facter-facts', ], {'ensure' => 'present'})  
   
   package { ['python34u-pip']: }
   class { 'python':
