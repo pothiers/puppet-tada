@@ -16,11 +16,11 @@ class tada::valley::install (
     refreshonly => true,
   }
 
-  vcsrepo { '/opt/tada-tools' :
-    ensure   => latest,
-    provider => git,
-    source   => 'https://github.com/pothiers/tada-tools.git',
-    revision => 'master',
-  }
+#!  vcsrepo { '/opt/tada-tools' :
+#!    ensure   => latest,
+#!    provider => git,
+#!    source   => 'https://github.com/pothiers/tada-tools.git',
+#!    revision => 'master',
+#!  }
   
 }

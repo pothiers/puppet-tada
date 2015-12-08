@@ -57,7 +57,7 @@ class tada::valley::config (
   #!  require   => [Service['xinetd'],],
   #!  subscribe => File['/etc/rsyncd.conf'],
   #!}
-  service { 'rsyncd':
+  service { 'rsync':
     subscribe => File['/etc/rsyncd.conf'],
     require   => [Service['xinetd'],],
     ensure   => 'running',
