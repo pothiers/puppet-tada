@@ -38,16 +38,16 @@ class tada::install (
   }
   -> Package<| provider == 'yum' |>
 
-  yumrepo { 'dmo':
-    descr    => 'dmo',
-    baseurl  => "http://mirrors.sdm.noao.edu/dmo",
-    enabled  => 1,
-    gpgcheck => 0,
-    priority => 1,
-    mirrorlist => absent,
-  }
-  -> Package<| provider == 'yum' |>
-  package { ['mcollective-facter-facts'] : }
+#!  yumrepo { 'dmo':
+#!    descr    => 'dmo',
+#!    baseurl  => "http://mirrors.sdm.noao.edu/dmo",
+#!    enabled  => 1,
+#!    gpgcheck => 0,
+#!    priority => 1,
+#!    mirrorlist => absent,
+#!  }
+#!  -> Package<| provider == 'yum' |>
+package { ['mcollective-facter-facts'] : }
   
   
   package { ['python34u-pip']: }
