@@ -56,6 +56,7 @@ class tada::valley::config (
     command   => "/sbin/chkconfig rsync on",
     require   => [Service['xinetd'],],
     subscribe => File['/etc/rsyncd.conf'],
+    onlyif    => "/sbin/chkconfig --list --type xinetd rsync | grep off",
   }
   #!service { 'rsync':
   #!  subscribe => File['/etc/rsyncd.conf'],
