@@ -24,7 +24,7 @@ class tada::config {
     ensure => 'present',
     #content => "${date}\n",
     owner  => 'tada',
-    group  => 'root',
+    group  => 'tada',
     mode   => '0774',
   }
 
