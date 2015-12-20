@@ -1,2 +1,12 @@
+# This file contains ADDITIONAL prefixes to add to the built-in
+# prefixes that TADA uses for archive filenames. A lookup into the
+# table is done based upon the first three fields (site, telescope,
+# instrument) to get the forth field (prefix).  Its possible for
+# multiple "keys" to yield the same prefix. Fields after the forth are
+# ignored. Any lines starting with "#" are ignored.
+#
+# For existing archive file naming conventions, see:
+# https://bitbucket.org/noao/opswiki/wiki/fits/File_Naming_Conventions_v12.pdf
+#
 #site,telescope,instrument,prefix,comment
 kp,bok23m,90prime,ksb,BOK
