@@ -6,7 +6,7 @@ class tada::mountain::config (
   $pushfilesh      = hiera('pushfilesh'),
   $astropost       = hiera('astropost'),
   $rsyncpwd        = hiera('rsyncpwd'),
-  $mtncache        = hiera('mtncache', '/var/tada/mountain_cache'),
+  $mtncache        = '/var/tada/cache',
   ) {
 
   file {  '/etc/tada/dqd.conf':
@@ -15,11 +15,6 @@ class tada::mountain::config (
   }
 
   file { "$mtncache":
-    ensure => 'directory',
-    mode   => '0777',
-    owner  => 'tada',
-  }
-  file { '/var/tada/mountain_stash':
     ensure => 'directory',
     mode   => '0777',
     owner  => 'tada',

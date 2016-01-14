@@ -17,11 +17,11 @@ class tada::valley::config (
     source => 'puppet:///modules/tada/dqd.submit.conf',
   }
 
-  file { [ '/var/tada/mountain-mirror', '/var/tada/noarchive']:
+  #!file { [ '/var/tada/mountain-mirror', '/var/tada/noarchive']:
+  file { [ '/var/tada/cache', '/var/tada/anticache']:
     ensure => 'directory',
     owner  => 'tada',
     mode   => '0744',
-    #!mode   => '0777', #!!! tighten up permissions after initial burn in period
   }
 
   firewall { '000 allow dqsvcpop':
@@ -58,14 +58,6 @@ class tada::valley::config (
     subscribe => File['/etc/rsyncd.conf'],
     onlyif    => "/sbin/chkconfig --list --type xinetd rsync | grep off",
   }
-  #!service { 'rsync':
-  #!  subscribe => File['/etc/rsyncd.conf'],
-  #!  require   => [Service['xinetd'],],
-  #!  ensure   => 'running',
-  #!  enable   => true,
-  #!  provider => 'redhat',
-  #!}
-
   
   firewall { '000 allow rsync':
     chain   => 'INPUT',

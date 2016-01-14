@@ -23,8 +23,7 @@
             
             "_COMMENT": "type specific fields follow",
             "next_queue": "submit",
-            "cache_dir": "/var/tada/mountain_cache/",
-            "mirror_dir":  "rsync://tada@valley/mountain_mirror",
+            "mirror_dir":  "rsync://tada@valley/cache",
             
             "_END": "dummy"
         },
@@ -47,8 +46,6 @@
             "arch_irods_host": "db.domain.org",
             "arch_irods_port": 1111,
             "submitlog":  "/var/log/tada/submit.manifest",
-            "mirror_dir":  "/var/tada/mountain-mirror",
-            "noarchive_dir": "/var/tada/noarchive",
             "archive_irods331": "/noao-tuc-z1/tada/", 
 
             "_END": "dummy"
