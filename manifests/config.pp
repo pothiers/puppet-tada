@@ -54,6 +54,12 @@ class tada::config {
     owner  => 'tada',
     mode   => '0777',
   }
+  file { '/etc/init.d/watchpushd':
+    ensure => 'present',
+    source => 'puppet:///modules/tada/watchpushd',
+    owner  => 'tada',
+    mode   => '0777',
+  }
 
   ## Use "ssh -t" instead?
 #!  file_line { 'disable_requiretty':

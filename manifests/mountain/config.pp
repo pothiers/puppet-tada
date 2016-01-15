@@ -14,6 +14,11 @@ class tada::mountain::config (
     source => 'puppet:///modules/tada/dqd.transfer.conf',
   }
 
+  file {  '/etc/tada/watchpushd.conf':
+    ensure     => 'present',
+    source => 'puppet:///modules/tada/watchpushd.conf',
+  }
+
   file { "$mtncache":
     ensure => 'directory',
     mode   => '0777',

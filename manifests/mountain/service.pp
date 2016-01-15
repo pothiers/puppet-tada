@@ -36,7 +36,6 @@ class tada::mountain::service (
   
   service { 'watchpushd':
     subscribe => [File ['/etc/tada/watchpushd.conf', '/etc/init.d/watchpushd'],
-                  Class['redis'],
                   Python::Requirements[ '/etc/tada/requirements.txt'],
                   Package['dataq', 'tada'],
                   ],
