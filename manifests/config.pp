@@ -1,5 +1,9 @@
 class tada::config {
+  $secrets      = '/etc/rsyncd.scr'
+  $rsyncdscr    = 'puppet:///modules/tada-hiera/rsyncd.scr'
+  $rsyncdconf   = hiera('rsyncdconf')
   $logging_conf=hiera('tada_logging_conf')
+  $watch_logging_conf=hiera('watch_logging_conf')
   $tada_conf=hiera('tada_conf')
   $date=strftime("%Y-%m-%d")
 
@@ -39,6 +43,11 @@ class tada::config {
     source => "${logging_conf}",
     mode   => '0774',
   }
+  file { '/etc/tada/watch.yaml':
+    ensure => 'present',
+    source => "${watch_logging_conf}",
+    mode   => '0774',
+  }
   file { '/var/log/tada/submit.manifest':
     ensure => 'file',
     owner  => 'tada',
@@ -53,6 +62,10 @@ class tada::config {
     source => 'puppet:///modules/tada/dqd',
     owner  => 'tada',
     mode   => '0777',
+  }
+  file {  '/etc/tada/watchpushd.conf':
+    ensure     => 'present',
+    source => 'puppet:///modules/tada/watchpushd.conf',
   }
   file { '/etc/init.d/watchpushd':
     ensure => 'present',
@@ -77,7 +90,40 @@ class tada::config {
 #!    udp_recv_channel   => $udp_recv_channel,
 #!    udp_send_channel   => $udp_send_channel,
 #!    tcp_accept_channel => $tcp_accept_channel
-#!  }
+  #!  }
 
+  ##############################################################################
+  ### rsync
+  file {  $secrets:
+    ensure => 'present',
+    source => "$rsyncdscr",
+    owner  => 'root',
+    mode   => '0400',
+  }
+  file {  '/etc/rsyncd.conf':
+    ensure => 'present',
+    source => "$rsyncdconf",
+    owner  => 'root',
+    mode   => '0400',
+  }
+  service { 'xinetd':
+    ensure  => 'running',
+    enable  => true,
+    require => Package['xinetd'],
+    }
+  exec { 'rsyncd':
+    command   => "/sbin/chkconfig rsync on",
+    require   => [Service['xinetd'],],
+    subscribe => File['/etc/rsyncd.conf'],
+    onlyif    => "/sbin/chkconfig --list --type xinetd rsync | grep off",
+  }
+  
+  firewall { '000 allow rsync':
+    chain   => 'INPUT',
+    state   => ['NEW'],
+    dport   => '873',
+    proto   => 'tcp',
+    action  => 'accept',
+  }
 
 }

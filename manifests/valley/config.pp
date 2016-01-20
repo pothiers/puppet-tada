@@ -2,13 +2,10 @@
 # https://docs.puppetlabs.com/guides/module_guides/bgtm.html
 
 class tada::valley::config (
-  $secrets      = '/etc/rsyncd.scr',
   $icmdpath     = '/usr/local/share/applications/irods3.3.1/iRODS/clients/icommands/bin',
   $logging_conf = hiera('tada_logging_conf'),
   $irodsdata    = hiera('irodsdata'),
   $irodsenv     = hiera('irodsenv'),
-  $rsyncdscr    = hiera('rsyncdscr'),
-  $rsyncdconf   = hiera('rsyncdconf'),
   $cupsclient   = hiera('cupsclient'),
   ) {
   
@@ -33,39 +30,6 @@ class tada::valley::config (
   }
   
 
-  ##############################################################################
-  ### rsync
-  file {  $secrets:
-    ensure => 'present',
-    source => "$rsyncdscr",
-    owner  => 'root',
-    mode   => '0400',
-  }
-  file {  '/etc/rsyncd.conf':
-    ensure => 'present',
-    source => "$rsyncdconf",
-    owner  => 'root',
-    mode   => '0400',
-  }
-  service { 'xinetd':
-    ensure  => 'running',
-    enable  => true,
-    require => Package['xinetd'],
-    }
-  exec { 'rsyncd':
-    command   => "/sbin/chkconfig rsync on",
-    require   => [Service['xinetd'],],
-    subscribe => File['/etc/rsyncd.conf'],
-    onlyif    => "/sbin/chkconfig --list --type xinetd rsync | grep off",
-  }
-  
-  firewall { '000 allow rsync':
-    chain   => 'INPUT',
-    state   => ['NEW'],
-    dport   => '873',
-    proto   => 'tcp',
-    action  => 'accept',
-  }
   ####
   ## Irods
   file { '/home/tada/.irods':

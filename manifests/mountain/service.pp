@@ -23,23 +23,23 @@ class tada::mountain::service (
   }
 
   service { 'dqd':
+    ensure    => 'running',
     subscribe => [File ['/etc/tada/dqd.conf', '/etc/init.d/dqd'],
                   Class['redis'],
                   Python::Requirements[ '/etc/tada/requirements.txt'],
                   Package['dataq', 'tada'],
                   ],
-    ensure    => 'running',
     enable    => true,
     provider  => 'redhat',
     path      => '/etc/init.d',
   }
   
   service { 'watchpushd':
+    ensure    => 'running',
     subscribe => [File ['/etc/tada/watchpushd.conf', '/etc/init.d/watchpushd'],
                   Python::Requirements[ '/etc/tada/requirements.txt'],
                   Package['dataq', 'tada'],
                   ],
-    ensure    => 'running',
     enable    => true,
     provider  => 'redhat',
     path      => '/etc/init.d',

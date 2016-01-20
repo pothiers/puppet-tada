@@ -13,7 +13,7 @@ class tada::install (
   # these are also given by: puppet-sdm
   #! include epel
   #!package { ['git', ]: }
-  ensure_resource('package', ['git', ], {'ensure' => 'present'})
+  ensure_resource('package', ['git', 'libyaml'], {'ensure' => 'present'})
   
   include augeas
   
