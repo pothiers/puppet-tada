@@ -1,6 +1,7 @@
 
 class tada::install (
-  $fpacktgz    = hiera('fpacktgz', 'puppet:///modules/tada/fpack-bin-centos-6.6.tgz')
+  $fpacktgz    = hiera('fpacktgz', 'puppet:///modules/tada/fpack-bin-centos-6.6.tgz'),
+  $irodstgz    = hiera('irodstgz', 'puppet:///tada/irods-3.3.1.tgz'),
   ) {
   
   $stamp=strftime("%Y-%m-%d %H:%M:%S")
@@ -90,6 +91,18 @@ class tada::install (
   exec { 'unpack fpack':
     command     => '/bin/tar -xf /usr/local/share/applications/fpack.tgz',
     cwd         => '/usr/local/bin',
+    refreshonly => true,
+  }
+
+
+  file { '/usr/local/share/applications/irods-3.3.1.tgz':
+    ensure => present,
+    source => "$irodstgz",
+    notify => Exec['unpack irods'],
+  } 
+  exec { 'unpack irods':
+    command     => '/bin/tar -xf /usr/local/share/applications/irods-3.3.1.tgz',
+    cwd         => '/usr/local/share/applications',
     refreshonly => true,
   }
   

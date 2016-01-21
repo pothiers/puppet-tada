@@ -1,15 +1,29 @@
-class tada::config {
-  $secrets      = '/etc/rsyncd.scr'
-  $rsyncdscr    = 'puppet:///modules/tada-hiera/rsyncd.scr'
-  $rsyncdconf   = hiera('rsyncdconf')
-  $logging_conf=hiera('tada_logging_conf')
-  $watch_logging_conf=hiera('watch_logging_conf')
-  $tada_conf=hiera('tada_conf')
-  $date=strftime("%Y-%m-%d")
+class tada::config (
+  $secrets        = '/etc/rsyncd.scr',
+  $rsyncdscr      = 'puppet:///modules/tada-hiera/rsyncd.scr',
+  $rsyncdconf     = hiera('rsyncdconf'),
+  $rsyncpwd       = hiera('rsyncpwd'),
+  $logging_conf   = hiera('tada_logging_conf'),
+  $watch_log_conf = hiera('watch_logging_conf'),
+  $tada_conf      = hiera('tada_conf'),
+  $host_type      = hiera('tada_host_type'),
+  $dqd_conf       = hiera('dqd_conf'), #'puppet:///modules/tada/dqd.submit.conf'
 
-  $udp_recv_channel = hiera('udp_recv_channel')
-  $udp_send_channel = hiera('udp_send_channel')
-  $tcp_accept_channel = hiera('tcp_accept_channel')
+  $irodsdata    = hiera('irodsdata'),
+  $irodsenv     = hiera('irodsenv'),
+  $icmdpath     = '/usr/local/share/applications/irods3.3.1/iRODS/clients/icommands/bin',
+
+  
+  $cupsdconf      = hiera('cupsdconf'),
+  $pushfilesh     = hiera('pushfilesh'),
+  $astropost      = hiera('astropost'),
+  $cupsclient   = hiera('cupsclient'),
+
+  $udp_recv_channel   = hiera('udp_recv_channel'),
+  $udp_send_channel   = hiera('udp_send_channel'),
+  $tcp_accept_channel = hiera('tcp_accept_channel'),
+
+  ) {
   
   user { 'tada' :
     ensure     => 'present',
@@ -24,14 +38,18 @@ class tada::config {
     group  => 'root',
     mode   => '0774',
   }
+  file { [ '/var/tada/cache', '/var/tada/anticache']:
+    ensure => 'directory',
+    owner  => 'tada',
+    group  => 'tada',
+    mode   => '0744',
+  }
   file { ['/var/log/tada/pop.log', '/var/log/tada/pop-detail.log']:
     ensure => 'present',
-    #content => "${date}\n",
     owner  => 'tada',
     group  => 'tada',
     mode   => '0774',
   }
-
   file {  '/etc/tada/tada.conf':
     ensure => 'present',
     source => "${tada_conf}",
@@ -45,7 +63,7 @@ class tada::config {
   }
   file { '/etc/tada/watch.yaml':
     ensure => 'present',
-    source => "${watch_logging_conf}",
+    source => "${watch_log_conf}",
     mode   => '0774',
   }
   file { '/var/log/tada/submit.manifest':
@@ -63,6 +81,10 @@ class tada::config {
     owner  => 'tada',
     mode   => '0777',
   }
+  file {  '/etc/tada/dqd.conf':
+    ensure     => 'present',
+    source => "${dqd_conf}",
+  }
   file {  '/etc/tada/watchpushd.conf':
     ensure     => 'present',
     source => 'puppet:///modules/tada/watchpushd.conf',
@@ -73,6 +95,15 @@ class tada::config {
     owner  => 'tada',
     mode   => '0777',
   }
+  # Not sure if firewall mods needed for dqsvcpop???
+  firewall { '000 allow dqsvcpop':
+    chain   => 'INPUT',
+    state   => ['NEW'],
+    dport   => '6379',
+    proto   => 'tcp',
+    action  => 'accept',
+  }
+  
 
   ## Use "ssh -t" instead?
 #!  file_line { 'disable_requiretty':
@@ -92,8 +123,21 @@ class tada::config {
 #!    tcp_accept_channel => $tcp_accept_channel
   #!  }
 
+  cron { tada_metrics:
+    command => "/opt/tada-cli/scripts/gmetrics-tada.sh ${host_type}",
+    user    => root,
+    minute  => '*/10',
+  }
+
+
   ##############################################################################
   ### rsync
+  file { '/etc/tada/rsync.pwd':
+    ensure => 'present',
+    source => "$rsyncpwd", 
+    mode   => '0400',
+    owner  => 'tada',
+  } 
   file {  $secrets:
     ensure => 'present',
     source => "$rsyncdscr",
@@ -126,4 +170,73 @@ class tada::config {
     action  => 'accept',
   }
 
+  ###########################################################################
+  ### astro: only needed for mountain (until LP replaced by rsync)
+  ###
+  file {  ['/usr/lib/cups',
+           '/usr/lib/cups/lib',
+           '/usr/lib/cups/lib/astro',
+           '/usr/lib/cups/backend']:
+             ensure => directory,
+  } 
+  file { '/etc/cups/cupsd.conf':
+    ensure     => 'present',
+    source => "$cupsdconf" ,
+    mode   => '0640',
+    group  => 'lp',
+  } 
+  file {  '/usr/lib/cups/lib/astro/pushfile.sh':
+    ensure => 'present',
+    source => "$pushfilesh",
+    mode   => '0555',
+    owner  => 'tada',
+  } 
+  file {  '/usr/lib/cups/backend/astropost':
+    ensure => 'present',
+    source => $astropost, 
+    mode   => '0700',
+    owner  => 'root',
+  }
+  firewall { '631 allow cups':
+    chain   => 'INPUT',
+    state   => ['NEW'],
+    dport   => '631',
+    proto   => 'tcp',
+    action  => 'accept',
+  }
+  # CUPS (client only)
+  file { '/etc/cups/client.conf':
+    ensure     => 'present',
+    source  => "$cupsclient",
+  }
+
+  ###########################################################################
+  ### irods: only needed for valley
+  ###
+  file { '/home/tada/.irods':
+    ensure => 'directory',
+    owner  => 'tada',
+  }
+  file { '/home/tada/.irods/.irodsEnv':
+    ensure     => 'present',
+    owner  => 'tada',
+    source => "$irodsenv",
+    }
+  file { '/home/tada/.irods/iinit.in':
+    ensure     => 'present',
+    owner  => 'tada',
+    source => "$irodsdata",
+  }
+  exec { 'iinit':
+    environment => ['irodsEnvFile=/home/tada/.irods/.irodsEnv',
+                    'HOME=/home/tada' ],
+    command     => "${icmdpath}/iinit `cat /home/tada/.irods/iinit.in`",
+    user        => 'tada',
+    creates     => '/home/tada/.irods/.irodsA',
+    require     => [Exec['unpack irods'],
+                    File[ '/home/tada/.irods/.irodsEnv',
+                          '/home/tada/.irods/iinit.in']],
+  }
+
 }
+
