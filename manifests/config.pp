@@ -39,11 +39,18 @@ class tada::config (
     group  => 'tada',
     mode   => '0774',
   }
-  file { [ '/var/tada/cache', '/var/tada/anticache']:
+  file { [ '/var/tada/cache', '/var/tada/anticache', '/var/tada/dropbox', '/var/tada/statusbox']:
     ensure => 'directory',
     owner  => 'tada',
     group  => 'tada',
     mode   => '0744',
+  }
+  file { '/var/tada/statusbox/tada-ug.pdf':
+    ensure => 'present',
+    owner  => 'tada',
+    group  => 'tada',
+    mode   => '0400',
+    source  => '/opt/tada/docs/tada-ug.pdf',
   }
   file { '/var/tada/personalities':
     ensure  => 'directory',

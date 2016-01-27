@@ -82,6 +82,12 @@ class tada::install (
     source   => 'https://github.com/pothiers/tada-cli.git',
     revision => 'master',
   }
+  vcsrepo { '/opt/tada' :
+    ensure   => latest,
+    provider => git,
+    source   => 'https://github.com/pothiers/tada.git',
+    revision => 'master',
+  }
 
   file { '/usr/local/share/applications/fpack.tgz':
     ensure => 'present',
