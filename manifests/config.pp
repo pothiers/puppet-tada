@@ -35,7 +35,8 @@ class tada::config (
   file { [ '/var/run/tada', '/var/log/tada', '/etc/tada', '/var/tada']:
     ensure => 'directory',
     owner  => 'tada',
-    group  => 'root',
+    #group  => 'root',
+    group  => 'tada',
     mode   => '0774',
   }
   file { [ '/var/tada/cache', '/var/tada/anticache']:
@@ -44,6 +45,28 @@ class tada::config (
     group  => 'tada',
     mode   => '0744',
   }
+  file { '/var/tada/personalities':
+    ensure  => 'directory',
+    owner   => 'tada',
+    group   => 'tada',
+    mode    => '0744',
+    source  => '/opt/tada-cli/personalities',
+    recurse => true,
+  }
+  file { '/home/tada/.tada':
+    ensure  => 'directory',
+    owner   => 'tada',
+    group   => 'tada',
+    mode    => '0744',
+  }
+  file { '/home/tada/.tada/rsync.pwd':
+    ensure => 'present',
+    owner  => 'tada',
+    group  => 'tada',
+    mode   => '0400',
+    source  => "${rsyncpwd}",
+  }
+  
   file { ['/var/log/tada/pop.log', '/var/log/tada/pop-detail.log']:
     ensure => 'present',
     owner  => 'tada',
@@ -74,7 +97,7 @@ class tada::config (
   file { '/etc/tada/requirements.txt':
     ensure => 'present',
     source => 'puppet:///modules/tada/requirements.txt',
-    }
+  }
   file { '/etc/init.d/dqd':
     ensure => 'present',
     source => 'puppet:///modules/tada/dqd',

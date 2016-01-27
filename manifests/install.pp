@@ -105,7 +105,7 @@ class tada::install (
     cwd         => '/usr/local/share/applications',
     refreshonly => true,
   }
-  
+
 }
 
 
