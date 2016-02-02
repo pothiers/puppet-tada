@@ -47,6 +47,7 @@ class tada::config (
   }
   file { '/var/tada/statusbox/tada-ug.pdf':
     ensure => 'present',
+    subscribe => [Vcsrepo['/opt/tada'], ],
     owner  => 'tada',
     group  => 'tada',
     mode   => '0400',
