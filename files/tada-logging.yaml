@@ -32,14 +32,6 @@ handlers:
     formatter: precise
     filename: /var/log/tada/pop-detail.log
     mode: a
-  email:
-    level   : ERROR
-    class: logging.handlers.SMTPHandler
-    mailhost: email.noao.edu
-    fromaddr: nobody@noao.edu
-    toaddrs:
-      - nobody@somplace.edu
-    subject: "TADA error."
 loggers:
   foo:
     level : ERROR
@@ -52,6 +44,6 @@ loggers:
     level: WARNING
 root:
   level     : DEBUG
-  handlers  : [console, debugfile, file, email, syslog]
+  handlers  : [console, debugfile, file, syslog]
 incremental: False
 disable_existing_loggers: True
