@@ -76,31 +76,36 @@ class tada::config (
   }
   
   file { ['/var/log/tada/pop.log', '/var/log/tada/pop-detail.log']:
-    ensure => 'present',
-    owner  => 'tada',
-    group  => 'tada',
-    mode   => '0774',
+    ensure  => 'present',
+    replace => false,
+    owner   => 'tada',
+    group   => 'tada',
+    mode    => '0774',
   }
   file {  '/etc/tada/tada.conf':
-    ensure => 'present',
-    source => "${tada_conf}",
-    group  => 'root',
-    mode   => '0774',
+    ensure  => 'present',
+    replace => false,
+    source  => "${tada_conf}",
+    group   => 'root',
+    mode    => '0774',
   }
   file { '/etc/tada/pop.yaml':
-    ensure => 'present',
-    source => "${logging_conf}",
-    mode   => '0774',
+    ensure  => 'present',
+    replace => false,
+    source  => "${logging_conf}",
+    mode    => '0774',
   }
   file { '/etc/tada/watch.yaml':
-    ensure => 'present',
-    source => "${watch_log_conf}",
-    mode   => '0774',
+    ensure  => 'present',
+    replace => false,
+    source  => "${watch_log_conf}",
+    mode    => '0774',
   }
   file { '/var/log/tada/submit.manifest':
-    ensure => 'file',
-    owner  => 'tada',
-    mode   => '0766',
+    ensure  => 'file',
+    replace => false,
+    owner   => 'tada',
+    mode    => '0766',
   }
   file { '/etc/tada/requirements.txt':
     ensure => 'present',
@@ -113,12 +118,14 @@ class tada::config (
     mode   => '0777',
   }
   file {  '/etc/tada/dqd.conf':
-    ensure     => 'present',
-    source => "${dqd_conf}",
+    replace => false,
+    ensure  => 'present',
+    source  => "${dqd_conf}",
   }
   file {  '/etc/tada/watchpushd.conf':
-    ensure     => 'present',
-    source => 'puppet:///modules/tada/watchpushd.conf',
+    ensure  => 'present',
+    replace => false,
+    source  => 'puppet:///modules/tada/watchpushd.conf',
   }
   file { '/etc/init.d/watchpushd':
     ensure => 'present',
@@ -170,16 +177,17 @@ class tada::config (
     owner  => 'tada',
   } 
   file {  $secrets:
-    ensure => 'present',
-    source => "$rsyncdscr",
-    owner  => 'root',
-    mode   => '0400',
+    ensure  => 'present',
+    source  => "$rsyncdscr",
+    owner   => 'root',
+    mode    => '0400',
   }
   file {  '/etc/rsyncd.conf':
-    ensure => 'present',
-    source => "$rsyncdconf",
-    owner  => 'root',
-    mode   => '0400',
+    ensure  => 'present',
+    replace => false,
+    source  => "$rsyncdconf",
+    owner   => 'root',
+    mode    => '0400',
   }
   service { 'xinetd':
     ensure  => 'running',
@@ -249,14 +257,16 @@ class tada::config (
     owner  => 'tada',
   }
   file { '/home/tada/.irods/.irodsEnv':
-    ensure     => 'present',
-    owner  => 'tada',
-    source => "$irodsenv",
+    ensure  => 'present',
+    replace => false,
+    owner   => 'tada',
+    source  => "$irodsenv",
     }
   file { '/home/tada/.irods/iinit.in':
-    ensure     => 'present',
-    owner  => 'tada',
-    source => "$irodsdata",
+    ensure  => 'present',
+    replace => false,
+    owner   => 'tada',
+    source  => "$irodsdata",
   }
   exec { 'iinit':
     environment => ['irodsEnvFile=/home/tada/.irods/.irodsEnv',
