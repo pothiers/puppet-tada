@@ -1,9 +1,11 @@
 version: 1
 formatters:
   brief:
-    format: '%(levelname)-8s: %(name)-15s: %(message)s'
+    format: '%(levelname)-8s: %(message)s'
   precise:
-    format: '%(asctime)s %(name)-15s %(levelname)-8s %(message)s'
+    format: '%(asctime)s %(levelname)-8s %(message)s'
+  detailed:
+    format: '%(asctime)s %(filename)-18s:%(lineno)4d %(levelname)-8s %(message)s'
 filters:
   allow_foo:
     name: foo
@@ -27,11 +29,12 @@ handlers:
     maxBytes: 10000000
     backupCount: 3
   debugfile:
-    class : logging.FileHandler
+    class : logging.handlers.RotatingFileHandler
     level   : DEBUG
-    formatter: precise
+    formatter: detailed
     filename: /var/log/tada/pop-detail.log
-    mode: a
+    maxBytes: 10000000
+    backupCount: 3
 loggers:
   foo:
     level : ERROR
