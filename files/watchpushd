@@ -11,7 +11,7 @@
 
 source /etc/tada/watchpushd.conf
 dir="/var/tada"
-cmd="/usr/bin/watch_mountain --loglevel ${loglevel}"
+cmd="/usr/bin/watch_drops --loglevel ${loglevel}"
 user="tada"
 
 name=`basename $0`
