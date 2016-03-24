@@ -4,6 +4,7 @@ class tada::config (
   $rsyncdconf     = hiera('rsyncdconf'),
   $rsyncpwd       = hiera('rsyncpwd'),
   $logging_conf   = hiera('tada_logging_conf'),
+  $dqcli_log_conf = hiera('dqcli_logging_conf'),
   $watch_log_conf = hiera('watch_logging_conf'),
   $tada_conf      = hiera('tada_conf'),
   $host_type      = hiera('tada_host_type'),
@@ -82,6 +83,13 @@ class tada::config (
     group   => 'tada',
     mode    => '0774',
   }
+  file { ['/var/log/tada/dqcli.log', '/var/log/tada/dqcli-detail.log']:
+    ensure  => 'present',
+    replace => false,
+    owner   => 'tada',
+    group   => 'tada',
+    mode    => '0774',
+  }
   file {  '/etc/tada/tada.conf':
     ensure  => 'present',
     replace => false,
@@ -93,6 +101,12 @@ class tada::config (
     ensure  => 'present',
     replace => false,
     source  => "${logging_conf}",
+    mode    => '0774',
+  }
+  file { '/etc/tada/dataq_cli_logconf.yaml':
+    ensure  => 'present',
+    replace => false,
+    source  => "${dqcli_log_conf}",
     mode    => '0774',
   }
   file { '/etc/tada/watch.yaml':
