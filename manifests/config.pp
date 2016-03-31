@@ -1,6 +1,6 @@
 class tada::config (
   $secrets        = '/etc/rsyncd.scr',
-  $rsyncdscr      = 'puppet:///modules/tada-hiera/rsyncd.scr',
+  $rsyncdscr      = hiera('rsyncdscr'),
   $rsyncdconf     = hiera('rsyncdconf'),
   $rsyncpwd       = hiera('rsyncpwd'),
   $logging_conf   = hiera('tada_logging_conf'),
@@ -8,22 +8,24 @@ class tada::config (
   $watch_log_conf = hiera('watch_logging_conf'),
   $tada_conf      = hiera('tada_conf'),
   $host_type      = hiera('tada_host_type'),
-  $dqd_conf       = hiera('dqd_conf'), #'puppet:///modules/tada/dqd.submit.conf'
+  $dqd_conf       = hiera('dqd_conf'), 
 
   $irodsdata    = hiera('irodsdata'),
   $irodsenv     = hiera('irodsenv'),
   $icmdpath     = '/usr/local/share/applications/irods3.3.1/iRODS/clients/icommands/bin',
-
-  
-  $cupsdconf      = hiera('cupsdconf'),
-  $pushfilesh     = hiera('pushfilesh'),
-  $astropost      = hiera('astropost'),
-  $cupsclient   = hiera('cupsclient'),
-
   $udp_recv_channel   = hiera('udp_recv_channel'),
   $udp_send_channel   = hiera('udp_send_channel'),
   $tcp_accept_channel = hiera('tcp_accept_channel'),
 
+  $dq_host             = hiera('dq_host'),
+  $dq_port             = hiera('dq_port'),
+  $arch_host           = hiera('arch_host'),
+  $arch_port           = hiera('arch_port'),
+  $arch_irods_host     = hiera('arch_irods_host'),
+  $arch_irods_port     = hiera('arch_irods_port'),
+  $arch_irods_resource = hiera('arch_irods_resource'),
+  $archive_irods331    = hiera('archive_irods331'),
+  $valley_host         = hiera('valley_host'),
   ) {
   
   user { 'tada' :
@@ -95,6 +97,32 @@ class tada::config (
     replace => false,
     source  => "${tada_conf}",
     group   => 'root',
+    mode    => '0774',
+  }
+  file {  '/etc/tada/hiera.yaml':
+    ensure  => 'present',
+    replace => false,
+    content => "---
+dq_host: ${dq_host}
+dq_port: ${dq_port}
+arch_host: ${arch_host}
+arch_port: ${arch_port}
+arch_irods_host: ${arch_irods_host}
+arch_irods_port: ${arch_irods_port}
+arch_irods_resource: ${arch_irods_resource}
+archive_irods331: ${archive_irods331}
+valley_host: ${valley_host}
+",
+    group   => 'root',
+    mode    => '0774',
+  }
+
+  file { '/etc/tada/pre-transfer.sh':
+    ensure  => 'present',
+    replace => false,
+    source  => "puppet:///modules/dmo-hiera/pre-transfer.sh",
+    owner   => 'tada',
+    group   => 'tada',
     mode    => '0774',
   }
   file { '/etc/tada/pop.yaml':
@@ -223,45 +251,45 @@ class tada::config (
     action  => 'accept',
   }
 
-  ###########################################################################
-  ### astro: only needed for mountain (until LP replaced by rsync)
-  ###
-  file {  ['/usr/lib/cups',
-           '/usr/lib/cups/lib',
-           '/usr/lib/cups/lib/astro',
-           '/usr/lib/cups/backend']:
-             ensure => directory,
-  } 
-  file { '/etc/cups/cupsd.conf':
-    ensure     => 'present',
-    source => "$cupsdconf" ,
-    mode   => '0640',
-    group  => 'lp',
-  } 
-  file {  '/usr/lib/cups/lib/astro/pushfile.sh':
-    ensure => 'present',
-    source => "$pushfilesh",
-    mode   => '0555',
-    owner  => 'tada',
-  } 
-  file {  '/usr/lib/cups/backend/astropost':
-    ensure => 'present',
-    source => $astropost, 
-    mode   => '0700',
-    owner  => 'root',
-  }
-  firewall { '631 allow cups':
-    chain   => 'INPUT',
-    state   => ['NEW'],
-    dport   => '631',
-    proto   => 'tcp',
-    action  => 'accept',
-  }
-  # CUPS (client only)
-  file { '/etc/cups/client.conf':
-    ensure     => 'present',
-    source  => "$cupsclient",
-  }
+#!  ###########################################################################
+#!  ### astro: only needed for mountain (until LP replaced by rsync)
+#!  ###
+#!  file {  ['/usr/lib/cups',
+#!           '/usr/lib/cups/lib',
+#!           '/usr/lib/cups/lib/astro',
+#!           '/usr/lib/cups/backend']:
+#!             ensure => directory,
+#!  } 
+#!  file { '/etc/cups/cupsd.conf':
+#!    ensure     => 'present',
+#!    source => "$cupsdconf" ,
+#!    mode   => '0640',
+#!    group  => 'lp',
+#!  } 
+#!  file {  '/usr/lib/cups/lib/astro/pushfile.sh':
+#!    ensure => 'present',
+#!    source => "$pushfilesh",
+#!    mode   => '0555',
+#!    owner  => 'tada',
+#!  } 
+#!  file {  '/usr/lib/cups/backend/astropost':
+#!    ensure => 'present',
+#!    source => $astropost, 
+#!    mode   => '0700',
+#!    owner  => 'root',
+#!  }
+#!  firewall { '631 allow cups':
+#!    chain   => 'INPUT',
+#!    state   => ['NEW'],
+#!    dport   => '631',
+#!    proto   => 'tcp',
+#!    action  => 'accept',
+#!  }
+#!  # CUPS (client only)
+#!  file { '/etc/cups/client.conf':
+#!    ensure     => 'present',
+#!    source  => "$cupsclient",
+#!  }
 
   ###########################################################################
   ### irods: only needed for valley

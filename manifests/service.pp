@@ -30,21 +30,21 @@ class tada::service  (
     path      => '/etc/init.d',
   }
   
-  ###########################################################################
-  ### astro: only needed for mountain (until LP replaced by rsync)
-  ###
-  service { 'cups':
-    ensure    => 'running',
-    enable    => true,
-    require   => Package['cups'],
-    subscribe => File['/etc/cups/cupsd.conf',
-                      '/usr/lib/cups/lib/astro/pushfile.sh',
-                      '/usr/lib/cups/backend/astropost'],
-  } 
-  exec { 'add-astro-printer':
-    subscribe   => Service['cups'],
-    refreshonly => true,
-    command     => "/usr/sbin/lpadmin -p ${printer} -v astropost:${cache} -E",
-  }
+#!  ###########################################################################
+#!  ### astro: only needed for mountain (until LP replaced by rsync)
+#!  ###
+#!  service { 'cups':
+#!    ensure    => 'running',
+#!    enable    => true,
+#!    require   => Package['cups'],
+#!    subscribe => File['/etc/cups/cupsd.conf',
+#!                      '/usr/lib/cups/lib/astro/pushfile.sh',
+#!                      '/usr/lib/cups/backend/astropost'],
+#!  } 
+#!  exec { 'add-astro-printer':
+#!    subscribe   => Service['cups'],
+#!    refreshonly => true,
+#!    command     => "/usr/sbin/lpadmin -p ${printer} -v astropost:${cache} -E",
+#!  }
   
   }
