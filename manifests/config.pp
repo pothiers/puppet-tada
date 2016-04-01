@@ -8,7 +8,9 @@ class tada::config (
   $watch_log_conf = hiera('watch_logging_conf'),
   $tada_conf      = hiera('tada_conf'),
   $host_type      = hiera('tada_host_type'),
-  $dqd_conf       = hiera('dqd_conf'), 
+  #$dqd_conf       = hiera('dqd_conf'), 
+  $dq_loglevel    = hiera('dq_loglevel'), 
+  $qname          = hiera('qname'), 
 
   $irodsdata    = hiera('irodsdata'),
   $irodsenv     = hiera('irodsenv'),
@@ -105,6 +107,7 @@ class tada::config (
     content => "---
 dq_host: ${dq_host}
 dq_port: ${dq_port}
+dq_loglevel: ${dq_loglevel}
 arch_host: ${arch_host}
 arch_port: ${arch_port}
 arch_irods_host: ${arch_irods_host}
@@ -162,7 +165,10 @@ valley_host: ${valley_host}
   file {  '/etc/tada/dqd.conf':
     replace => false,
     ensure  => 'present',
-    source  => "${dqd_conf}",
+    content => "
+qname=${qname}
+dqlevel=${dq_loglevel}
+",
   }
   file {  '/etc/tada/watchpushd.conf':
     ensure  => 'present',
