@@ -15,14 +15,14 @@ handlers:
     class : logging.handlers.RotatingFileHandler
     level   : INFO
     formatter: precise
-    filename: /var/log/tada/pop.log
+    filename: /var/log/tada/dqcli.log
     maxBytes: 10000000
     backupCount: 3
   debugfile:
     class : logging.handlers.RotatingFileHandler
     level   : DEBUG
     formatter: precise
-    filename: /var/log/tada/pop-detail.log
+    filename: /var/log/tada/dqcli-detail.log
     maxBytes: 10000000
     backupCount: 3
 root:
