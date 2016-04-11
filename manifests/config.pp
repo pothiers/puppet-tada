@@ -8,9 +8,9 @@ class tada::config (
   $watch_log_conf = hiera('watch_logging_conf'),
   $tada_conf      = hiera('tada_conf'),
   $host_type      = hiera('tada_host_type'),
-  #$dqd_conf       = hiera('dqd_conf'), 
-  $dq_loglevel    = hiera('dq_loglevel'), 
-  $qname          = hiera('qname'), 
+  #$dqd_conf       = hiera('dqd_conf'),
+  $dq_loglevel    = hiera('dq_loglevel'),
+  $qname          = hiera('qname'),
 
   $irodsdata    = hiera('irodsdata'),
   $irodsenv     = hiera('irodsenv'),
@@ -29,13 +29,12 @@ class tada::config (
   $archive_irods331    = hiera('archive_irods331'),
   $valley_host         = hiera('valley_host'),
   ) {
-  
   user { 'tada' :
     ensure     => 'present',
     comment    => 'For running TADA related services and actions',
-    managehome => true, 
+    managehome => true,
     password   => '$1$Pk1b6yel$tPE2h9vxYE248CoGKfhR41',  # tada"Password"
-    system     => true,  
+    system     => true,
   }
   file { [ '/var/run/tada', '/var/log/tada', '/etc/tada', '/var/tada']:
     ensure => 'directory',
@@ -44,19 +43,22 @@ class tada::config (
     group  => 'tada',
     mode   => '0774',
   }
-  file { [ '/var/tada/cache', '/var/tada/anticache', '/var/tada/dropbox', '/var/tada/statusbox']:
+  file { ['/var/tada/cache',
+          '/var/tada/anticache',
+          '/var/tada/dropbox',
+          '/var/tada/statusbox']:
     ensure => 'directory',
     owner  => 'tada',
     group  => 'tada',
     mode   => '0744',
   }
   file { '/var/tada/statusbox/tada-ug.pdf':
-    ensure => 'present',
+    ensure    => 'present',
     subscribe => [Vcsrepo['/opt/tada'], ],
-    owner  => 'tada',
-    group  => 'tada',
-    mode   => '0400',
-    source  => '/opt/tada/docs/tada-ug.pdf',
+    owner     => 'tada',
+    group     => 'tada',
+    mode      => '0400',
+    source    => '/opt/tada/docs/tada-ug.pdf',
   }
   file { '/var/tada/personalities':
     ensure  => 'directory',
@@ -73,13 +75,12 @@ class tada::config (
     mode    => '0744',
   }
   file { '/home/tada/.tada/rsync.pwd':
-    ensure => 'present',
-    owner  => 'tada',
-    group  => 'tada',
-    mode   => '0400',
+    ensure  => 'present',
+    owner   => 'tada',
+    group   => 'tada',
+    mode    => '0400',
     source  => "${rsyncpwd}",
   }
-  
   file { ['/var/log/tada/pop.log', '/var/log/tada/pop-detail.log']:
     ensure  => 'present',
     replace => false,
@@ -123,7 +124,7 @@ valley_host: ${valley_host}
   file { '/etc/tada/pre-transfer.sh':
     ensure  => 'present',
     replace => false,
-    source  => "puppet:///modules/dmo-hiera/pre-transfer.sh",
+    source  => 'puppet:///modules/dmo-hiera/pre-transfer.sh',
     owner   => 'tada',
     group   => 'tada',
     mode    => '0774',
@@ -163,8 +164,8 @@ valley_host: ${valley_host}
     mode   => '0777',
   }
   file {  '/etc/tada/dqd.conf':
-    replace => false,
     ensure  => 'present',
+    replace => false,
     content => "
 qname=${qname}
 dqlevel=${dq_loglevel}
@@ -189,7 +190,6 @@ dqlevel=${dq_loglevel}
     proto   => 'tcp',
     action  => 'accept',
   }
-  
 
   ## Use "ssh -t" instead?
 #!  file_line { 'disable_requiretty':
@@ -209,7 +209,7 @@ dqlevel=${dq_loglevel}
 #!    tcp_accept_channel => $tcp_accept_channel
   #!  }
 
-  cron { tada_metrics:
+  cron { 'tada_metrics':
     command => "/opt/tada-cli/scripts/gmetrics-tada.sh ${host_type}",
     user    => root,
     minute  => '*/10',
@@ -220,20 +220,20 @@ dqlevel=${dq_loglevel}
   ### rsync
   file { '/etc/tada/rsync.pwd':
     ensure => 'present',
-    source => "$rsyncpwd", 
+    source => "${rsyncpwd}",
     mode   => '0400',
     owner  => 'tada',
-  } 
+  }
   file {  $secrets:
     ensure  => 'present',
-    source  => "$rsyncdscr",
+    source  => "${rsyncdscr}",
     owner   => 'root',
     mode    => '0400',
   }
   file {  '/etc/rsyncd.conf':
     ensure  => 'present',
     replace => false,
-    source  => "$rsyncdconf",
+    source  => "${rsyncdconf}",
     owner   => 'root',
     mode    => '0400',
   }
@@ -243,12 +243,11 @@ dqlevel=${dq_loglevel}
     require => Package['xinetd'],
     }
   exec { 'rsyncd':
-    command   => "/sbin/chkconfig rsync on",
+    command   => '/sbin/chkconfig rsync on',
     require   => [Service['xinetd'],],
     subscribe => File['/etc/rsyncd.conf'],
-    onlyif    => "/sbin/chkconfig --list --type xinetd rsync | grep off",
+    onlyif    => '/sbin/chkconfig --list --type xinetd rsync | grep off',
   }
-  
   firewall { '000 allow rsync':
     chain   => 'INPUT',
     state   => ['NEW'],
@@ -257,48 +256,8 @@ dqlevel=${dq_loglevel}
     action  => 'accept',
   }
 
-#!  ###########################################################################
-#!  ### astro: only needed for mountain (until LP replaced by rsync)
-#!  ###
-#!  file {  ['/usr/lib/cups',
-#!           '/usr/lib/cups/lib',
-#!           '/usr/lib/cups/lib/astro',
-#!           '/usr/lib/cups/backend']:
-#!             ensure => directory,
-#!  } 
-#!  file { '/etc/cups/cupsd.conf':
-#!    ensure     => 'present',
-#!    source => "$cupsdconf" ,
-#!    mode   => '0640',
-#!    group  => 'lp',
-#!  } 
-#!  file {  '/usr/lib/cups/lib/astro/pushfile.sh':
-#!    ensure => 'present',
-#!    source => "$pushfilesh",
-#!    mode   => '0555',
-#!    owner  => 'tada',
-#!  } 
-#!  file {  '/usr/lib/cups/backend/astropost':
-#!    ensure => 'present',
-#!    source => $astropost, 
-#!    mode   => '0700',
-#!    owner  => 'root',
-#!  }
-#!  firewall { '631 allow cups':
-#!    chain   => 'INPUT',
-#!    state   => ['NEW'],
-#!    dport   => '631',
-#!    proto   => 'tcp',
-#!    action  => 'accept',
-#!  }
-#!  # CUPS (client only)
-#!  file { '/etc/cups/client.conf':
-#!    ensure     => 'present',
-#!    source  => "$cupsclient",
-#!  }
-
   ###########################################################################
-  ### irods: only needed for valley
+  ### irods: only needed for valley but ok for mountain too
   ###
   file { '/home/tada/.irods':
     ensure => 'directory',
@@ -308,13 +267,13 @@ dqlevel=${dq_loglevel}
     ensure  => 'present',
     replace => false,
     owner   => 'tada',
-    source  => "$irodsenv",
-    }
+    source  => "${irodsenv}",
+  }
   file { '/home/tada/.irods/iinit.in':
     ensure  => 'present',
     replace => false,
     owner   => 'tada',
-    source  => "$irodsdata",
+    source  => "${irodsdata}",
   }
   exec { 'iinit':
     environment => ['irodsEnvFile=/home/tada/.irods/.irodsEnv',

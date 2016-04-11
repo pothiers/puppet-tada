@@ -5,13 +5,12 @@
 class tada::service  (
   $printer  = 'astro',
   $cache    = '/var/tada/cache',
-  ) {
-  
+  ) {  
   service { 'dqd':
     ensure   => 'running',
     subscribe => [File ['/etc/tada/dqd.conf',
                         '/etc/init.d/dqd',
-                        '/etc/tada/hiera.yaml'
+                        '/etc/tada/hiera.yaml',
                         '/etc/tada/tada.conf'
                         ],
                   Class['redis'],
@@ -26,31 +25,14 @@ class tada::service  (
   service { 'watchpushd':
     ensure    => 'running',
     subscribe => [File ['/etc/tada/watchpushd.conf',
-                        '/etc/init.d/watchpushd',
+                        '/etc/init.d/watchpushd'
                         ],
                   Python::Requirements[ '/etc/tada/requirements.txt'],
-                  Package['dataq', 'tada'],
+                  Package['dataq', 'tada']
                   ],
     enable    => true,
     provider  => 'redhat',
     path      => '/etc/init.d',
   }
-  
-#!  ###########################################################################
-#!  ### astro: only needed for mountain (until LP replaced by rsync)
-#!  ###
-#!  service { 'cups':
-#!    ensure    => 'running',
-#!    enable    => true,
-#!    require   => Package['cups'],
-#!    subscribe => File['/etc/cups/cupsd.conf',
-#!                      '/usr/lib/cups/lib/astro/pushfile.sh',
-#!                      '/usr/lib/cups/backend/astropost'],
-#!  } 
-#!  exec { 'add-astro-printer':
-#!    subscribe   => Service['cups'],
-#!    refreshonly => true,
-#!    command     => "/usr/sbin/lpadmin -p ${printer} -v astropost:${cache} -E",
-#!  }
   
   }
