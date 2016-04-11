@@ -25,7 +25,7 @@ class tada::service  (
   service { 'watchpushd':
     ensure    => 'running',
     subscribe => [File ['/etc/tada/watchpushd.conf',
-                        '/etc/init.d/watchpushd',
+                        '/etc/init.d/watchpushd'
                         ],
                   Python::Requirements[ '/etc/tada/requirements.txt'],
                   Package['dataq', 'tada']
