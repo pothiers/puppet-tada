@@ -11,7 +11,7 @@ class tada::service  (
     subscribe => [File ['/etc/tada/dqd.conf',
                         '/etc/init.d/dqd',
                         '/etc/tada/hiera.yaml',
-                        '/etc/tada/tada.conf'
+                        '/etc/tada/tada.conf',
                         ],
                   Class['redis'],
                   Python::Requirements[ '/etc/tada/requirements.txt'],
