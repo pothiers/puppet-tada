@@ -18,7 +18,7 @@ class tada::install (
   
   include augeas
   
-  package { ['cups', 'xinetd'] : }
+  package { ['cups', 'xinetd', 'postgresql-devel'] : }
   yumrepo { 'ius':
     descr      => 'ius - stable',
     baseurl    => 'http://dl.iuscommunity.org/pub/ius/stable/CentOS/6/x86_64/',

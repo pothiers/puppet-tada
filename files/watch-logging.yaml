@@ -15,16 +15,15 @@ handlers:
     class : logging.handlers.RotatingFileHandler
     level   : INFO
     formatter: precise
-    filename: /var/log/tada/pop.log
+    filename: /var/log/tada/watch.log
     maxBytes: 10000000
     backupCount: 3
   debugfile:
-    class : logging.handlers.RotatingFileHandler
+    class : logging.FileHandler
     level   : DEBUG
     formatter: precise
-    filename: /var/log/tada/pop-detail.log
-    maxBytes: 10000000
-    backupCount: 3
+    filename: /var/log/tada/watch-detail.log
+    mode: a
 root:
   level     : DEBUG
   handlers  : [debugfile, file, syslog]
