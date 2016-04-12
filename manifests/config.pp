@@ -47,7 +47,7 @@ class tada::config (
           '/var/tada/anticache',
           '/var/tada/dropbox',
           '/var/tada/statusbox']:
-    ensure => 'file', # not 'directory' since we might make symlink later
+    ensure => 'present', # not 'directory' since we might make symlink later
     owner  => 'tada',
     group  => 'tada',
     mode   => '0744',
