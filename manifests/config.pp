@@ -59,20 +59,24 @@ class tada::config (
     mode   => '0744',
   }
   file { '/var/tada/cache' :
-    ensure => 'link',
-    target => '/var/tada/data/cache',
+    ensure  => 'link',
+    replace => false,
+    target  => '/var/tada/data/cache',
   }
   file { '/var/tada/anticache' :
-    ensure => 'link',
-    target => '/var/tada/data/anticache',
+    ensure  => 'link',
+    replace => false,
+    target  => '/var/tada/data/anticache',
   }
   file { '/var/tada/dropbox' :
-    ensure => 'link',
-    target => '/var/tada/data/dropbox',
+    ensure  => 'link',
+    replace => false,
+    target  => '/var/tada/data/dropbox',
   }
   file { '/var/tada/statusbox' :
-    ensure => 'link',
-    target => '/var/tada/data/statusbox',
+    ensure  => 'link',
+    replace => false,
+    target  => '/var/tada/data/statusbox',
   }
   # file { ['/var/tada/cache',
   #         '/var/tada/anticache',
