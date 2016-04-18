@@ -52,6 +52,7 @@ class tada::config (
   file { ['/var/tada/data/cache',
           '/var/tada/data/anticache',
           '/var/tada/data/dropbox',
+          '/var/tada/data/nowatch',
           '/var/tada/data/statusbox']:
     ensure => 'directory',
     owner  => 'tada',
@@ -73,20 +74,16 @@ class tada::config (
     replace => false,
     target  => '/var/tada/data/dropbox',
   }
+  file { '/var/tada/nowatch' :
+    ensure  => 'link',
+    replace => false,
+    target  => '/var/tada/data/nowatch',
+  }
   file { '/var/tada/statusbox' :
     ensure  => 'link',
     replace => false,
     target  => '/var/tada/data/statusbox',
   }
-  # file { ['/var/tada/cache',
-  #         '/var/tada/anticache',
-  #         '/var/tada/dropbox',
-  #         '/var/tada/statusbox']:
-  #   ensure => 'present', # not 'directory' since we might make symlink later
-  #   owner  => 'tada',
-  #   group  => 'tada',
-  #   mode   => '0744',
-  # }
   file { '/var/tada/statusbox/tada-ug.pdf':
     ensure    => 'present',
     subscribe => [Vcsrepo['/opt/tada'], ],
