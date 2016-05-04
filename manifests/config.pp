@@ -189,6 +189,10 @@ valley_host: ${valley_host}
     ensure => 'present',
     source => 'puppet:///modules/tada/requirements.txt',
   }
+  file { '/etc/tada/audit-schema.sql':
+    ensure => 'present',
+    source => 'puppet:///modules/tada/audit-schema.sql',
+  }
   file { '/etc/init.d/dqd':
     ensure => 'present',
     source => 'puppet:///modules/tada/dqd',

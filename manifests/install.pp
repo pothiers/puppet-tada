@@ -100,7 +100,15 @@ class tada::install (
     refreshonly => true,
   }
 
-
+  exec { 'create audit DB':
+    command     => '/usr/bin/sqlite3 /var/log/tada/audit.db < /etc/tada/audit-schema.sql',
+    onlyif  => "/usr/bin/test ! -f /var/log/tada/audit.db",
+    subscribe => File['/etc/tada/audit-schema.sql'],
+    } ~>
+    exec { 'ALL writable':
+      command  => '/bin/chmod a+rw /var/log/tada/audit.db',
+    }
+    
   file { '/usr/local/share/applications/irods-3.3.1.tgz':
     ensure => present,
     source => "$irodstgz",
