@@ -96,12 +96,12 @@ class tada::config (
     source    => '/opt/tada/docs/tada-ug.pdf',
   }
   file { '/var/tada/personalities':
-    ensure  => 'directory',
+    ensure  => 'link',
+    replace => false,
     owner   => 'tada',
     group   => 'tada',
     mode    => '0744',
     source  => '/opt/tada-cli/personalities',
-    recurse => true,
   }
   file { '/usr/local':
     ensure => 'directory',
