@@ -28,6 +28,8 @@ class tada::config (
   $arch_irods_resource = hiera('arch_irods_resource'),
   $archive_irods331    = hiera('archive_irods331'),
   $valley_host         = hiera('valley_host'),
+  $mars_host         = hiera('mars_host'),
+  $mars_port         = hiera('mars_port'),
   ) {
   user { 'tada' :
     ensure     => 'present',
@@ -86,6 +88,7 @@ class tada::config (
   }
   file { '/var/tada/statusbox/tada-ug.pdf':
     ensure    => 'present',
+    replace => true,
     subscribe => [Vcsrepo['/opt/tada'], ],
     owner     => 'tada',
     group     => 'tada',
@@ -100,6 +103,12 @@ class tada::config (
     source  => '/opt/tada-cli/personalities',
     recurse => true,
   }
+  file { '/usr/local':
+    ensure => 'directory',
+  }
+  file { '/usr/local/bin':
+    ensure => 'directory',
+  }
   file { '/home/tada/.tada':
     ensure  => 'directory',
     owner   => 'tada',
@@ -108,6 +117,7 @@ class tada::config (
   }
   file { '/home/tada/.tada/rsync.pwd':
     ensure  => 'present',
+    replace => false,
     owner   => 'tada',
     group   => 'tada',
     mode    => '0400',
@@ -148,6 +158,8 @@ arch_irods_port: ${arch_irods_port}
 arch_irods_resource: ${arch_irods_resource}
 archive_irods331: ${archive_irods331}
 valley_host: ${valley_host}
+mars_host: ${mars_host}
+mars_port: ${mars_port}
 ",
     group   => 'root',
     mode    => '0774',
@@ -187,14 +199,17 @@ valley_host: ${valley_host}
   }
   file { '/etc/tada/requirements.txt':
     ensure => 'present',
+    replace => false,
     source => 'puppet:///modules/tada/requirements.txt',
   }
   file { '/etc/tada/audit-schema.sql':
     ensure => 'present',
+    replace => false,
     source => 'puppet:///modules/tada/audit-schema.sql',
   }
   file { '/etc/init.d/dqd':
     ensure => 'present',
+    replace => false,
     source => 'puppet:///modules/tada/dqd',
     owner  => 'tada',
     mode   => '0777',
@@ -212,8 +227,16 @@ dqlevel=${dq_loglevel}
     replace => false,
     source  => 'puppet:///modules/tada/watchpushd.conf',
   }
+  file { '/etc/tada/EXAMPLE_prefix_table.csv':
+    ensure => 'present',
+    replace => false,
+    source => 'puppet:///modules/tada/prefix_table.csv',
+    owner  => 'tada',
+    mode   => '0777',
+  }
   file { '/etc/init.d/watchpushd':
     ensure => 'present',
+    replace => false,
     source => 'puppet:///modules/tada/watchpushd',
     owner  => 'tada',
     mode   => '0777',
@@ -256,12 +279,14 @@ dqlevel=${dq_loglevel}
   ### rsync
   file { '/etc/tada/rsync.pwd':
     ensure => 'present',
+    replace => false,
     source => "${rsyncpwd}",
     mode   => '0400',
     owner  => 'tada',
   }
   file {  $secrets:
     ensure  => 'present',
+    replace => false,
     source  => "${rsyncdscr}",
     owner   => 'root',
     mode    => '0400',
