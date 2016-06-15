@@ -98,10 +98,10 @@ class tada::config (
   file { '/var/tada/personalities':
     ensure  => 'link',
     replace => false,
-    owner   => 'tada',
-    group   => 'tada',
-    mode    => '0744',
-    source  => '/opt/tada-cli/personalities',
+    #owner   => 'tada',
+    #group   => 'tada',
+    #mode    => '0744',
+    target  => '/opt/tada-cli/personalities',
   }
   file { '/usr/local':
     ensure => 'directory',
