@@ -346,6 +346,10 @@ dqlevel=${dq_loglevel}
                     File[ '/home/tada/.irods/.irodsEnv',
                           '/home/tada/.irods/iinit.in']],
   }
-
-}
+  file { '/etc/logrotate.d/tada':
+    ensure  => 'present',
+    replace => false,
+    source  => 'puppet:///modules/tada/tada.logrotate',
+  }
+  }
 
