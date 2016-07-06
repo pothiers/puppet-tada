@@ -50,26 +50,32 @@ class tada::install (
 #!  -> Package<| provider == 'yum' |>
 #! ensure_resource('package', ['mcollective-facter-facts', ], {'ensure' => 'present'})  
   
-  package { ['python34u-pip']: }
+  package { ['python34u-pip']: } ->
   class { 'python':
     version    => '34u',
     pip        => false,
     dev        => true,
-  } 
+  } ->
   file { '/usr/bin/pip':
     ensure => 'link',
     target => '/usr/bin/pip3.4',
-  }
-
+  } ->
+  file { '/usr/local/bin/python3':
+    ensure => 'link',
+    target => '/usr/bin/python3',
+  } ->
   python::requirements { '/etc/tada/requirements.txt':
     owner  => 'root',
-  }
+  } ->
   package{ ['dataq', 'tada'] : }
   
-  Class['python'] -> Package['python34u-pip'] -> File['/usr/bin/pip']
-  -> Python::Requirements['/etc/tada/requirements.txt']
-  -> Package['dataq', 'tada'] 
-  -> Service['dqd']
+  #! Class['python']
+  #! -> Package['python34u-pip']
+  #! -> File['/usr/bin/pip']
+  #! -> File['/usr/local/bin/python3']
+  #! -> Python::Requirements['/etc/tada/requirements.txt']
+  #! -> Package['dataq', 'tada']
+  #! -> Service['dqd']
   
   class { 'redis':
     version           => '2.8.19',
@@ -79,7 +85,7 @@ class tada::install (
   vcsrepo { '/opt/tada-cli' :
     ensure   => latest,
     provider => git,
-    source   => 'https://github.com/pothiers/tada-cli.git',
+    source   => 'https://github.com/NOAO/tada-cli.git',
     revision => 'master',
   }
   vcsrepo { '/opt/tada' :
@@ -91,6 +97,7 @@ class tada::install (
 
   file { '/usr/local/share/applications/fpack.tgz':
     ensure => 'present',
+    replace => false,
     source => "$fpacktgz",
     notify => Exec['unpack fpack'],
   } 
@@ -101,16 +108,17 @@ class tada::install (
   }
 
   exec { 'create audit DB':
-    command     => '/usr/bin/sqlite3 /var/log/tada/audit.db < /etc/tada/audit-schema.sql',
+    command     => '/usr/bin/sqlite3 /var/log/tada/audit.db < /etc/tada/audit-schema.sql;/bin/chmod a+rw /var/log/tada/audit.db',
     onlyif  => "/usr/bin/test ! -f /var/log/tada/audit.db",
     subscribe => File['/etc/tada/audit-schema.sql'],
-    } ~>
-    exec { 'ALL writable':
-      command  => '/bin/chmod a+rw /var/log/tada/audit.db',
-    }
+    } 
+#!    exec { 'make audit.db writable by everyone':
+#!      command  => '/bin/chmod a+rw /var/log/tada/audit.db',
+#!    }
     
   file { '/usr/local/share/applications/irods-3.3.1.tgz':
     ensure => present,
+    replace => false,
     source => "$irodstgz",
     notify => Exec['unpack irods'],
   } 

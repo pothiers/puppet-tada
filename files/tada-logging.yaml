@@ -6,20 +6,15 @@ formatters:
   precise:
     format: '%(asctime)s %(filename)-17s %(levelname)-8s %(message)s'
 handlers:
-  syslog:
-    class : logging.handlers.SysLogHandler
-    address : /dev/log
-    facility : local6
-    formatter: brief
   file:
-    class : logging.handlers.RotatingFileHandler
+    class : logging.handlers.FileHandler
     level   : INFO
     formatter: precise
     filename: /var/log/tada/pop.log
     maxBytes: 10000000
     backupCount: 3
   debugfile:
-    class : logging.handlers.RotatingFileHandler
+    class : logging.handlers.FileHandler
     level   : DEBUG
     formatter: precise
     filename: /var/log/tada/pop-detail.log
@@ -27,6 +22,6 @@ handlers:
     backupCount: 3
 root:
   level     : DEBUG
-  handlers  : [debugfile, file, syslog]
+  handlers  : [debugfile, file]
 incremental: False
 disable_existing_loggers: True
