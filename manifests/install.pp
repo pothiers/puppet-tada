@@ -37,6 +37,14 @@ class tada::install (
     priority => 1,
     mirrorlist => absent,
   }
+  yumrepo { 'dataq':
+    descr    => 'dataq',
+    baseurl  => "http://mirrors.sdm.noao.edu/dataq",
+    enabled  => 1,
+    gpgcheck => 0,
+    priority => 1,
+    mirrorlist => absent,
+  }
   -> Package<| provider == 'yum' |>
 
 #!  yumrepo { 'dmo':
