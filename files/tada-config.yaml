@@ -1,0 +1,19 @@
+--- # TADA config
+# The parts of this that relate to specific valley and mountain machines
+# should be provided via hiera.  
+
+version: 2
+maximum_errors_per_record: 0
+seconds_between_retry: 1
+maxium_queue_size: 11000
+
+transfer:
+  # For moving files from Mountain to Valley.
+  action_name: network_move
+  next_queue: submit
+
+submit:  
+  # For submitting files to archive
+  action_name: submit
+
+  
