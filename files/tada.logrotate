@@ -11,4 +11,10 @@
     size 10k
     rotate 3
 }
-                    
+
+/var/log/rsyncd.log {
+    compress
+    size 100M
+    rotate 3
+}
+
