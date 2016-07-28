@@ -19,6 +19,7 @@ class tada::config (
   $udp_send_channel   = hiera('udp_send_channel'),
   $tcp_accept_channel = hiera('tcp_accept_channel'),
 
+  # Use these to install a yaml file that TADA can use to get underlying values
   $dq_host             = hiera('dq_host'),
   $dq_port             = hiera('dq_port'),
   $arch_host           = hiera('arch_host'),
@@ -28,8 +29,8 @@ class tada::config (
   $arch_irods_resource = hiera('arch_irods_resource'),
   $archive_irods331    = hiera('archive_irods331'),
   $valley_host         = hiera('valley_host'),
-  $mars_host         = hiera('mars_host'),
-  $mars_port         = hiera('mars_port'),
+  $mars_host           = hiera('mars_host'),
+  $mars_port           = hiera('mars_port'),
   ) {
   user { 'tada' :
     ensure     => 'present',
@@ -346,6 +347,10 @@ dqlevel=${dq_loglevel}
                     File[ '/home/tada/.irods/.irodsEnv',
                           '/home/tada/.irods/iinit.in']],
   }
-
-}
+  file { '/etc/logrotate.d/tada':
+    ensure  => 'present',
+    replace => false,
+    source  => 'puppet:///modules/tada/tada.logrotate',
+  }
+  }
 
