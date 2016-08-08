@@ -5,7 +5,7 @@
 version: 2
 maximum_errors_per_record: 0
 seconds_between_retry: 1
-maxium_queue_size: 11000
+maximum_queue_size: 11000
 
 transfer:
   # For moving files from Mountain to Valley.
