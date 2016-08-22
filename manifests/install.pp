@@ -135,7 +135,11 @@ class tada::install (
     cwd         => '/usr/local/share/applications',
     refreshonly => true,
   }
-
+  file { '/usr/local/bin/fitsverify' :
+    ensure  => present,
+    replace => false,
+    source  => 'puppet:///tada/fitsverify',
+    }
 }
 
 
