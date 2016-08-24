@@ -138,7 +138,7 @@ class tada::install (
   file { '/usr/local/bin/fitsverify' :
     ensure  => present,
     replace => false,
-    source  => 'puppet:///tada/fitsverify',
+    source  => 'puppet:///modules/tada/fitsverify',
     }
 }
 
