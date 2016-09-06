@@ -2,6 +2,7 @@
 dq_host: %{::clientcert} # use VALLEY_HOST from mountain.yaml
 dq_port: 9988
 dq_loglevel: DEBUG
+dq_unblock_timeout: 600 # seconds to wait before unblocking on queue pop
 
 tada_conf: 'puppet:///modules/dmo-hiera/tada-config.yaml'
 tada_logging_conf: 'puppet:///modules/dmo-hiera/tada-logging.yaml'

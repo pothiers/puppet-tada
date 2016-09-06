@@ -136,7 +136,7 @@ class tada::config (
     replace => false,
     owner   => 'tada',
     group   => 'tada',
-    mode    => '0774',
+    mode    => '0777',
   }
   file {  '/etc/tada/tada.conf':
     ensure  => 'present',
