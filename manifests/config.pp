@@ -294,7 +294,7 @@ dqlevel=${dq_loglevel}
   }
   file {  '/etc/rsyncd.conf':
     ensure  => 'present',
-    replace => false,
+    replace => true,
     source  => "${rsyncdconf}",
     owner   => 'root',
     mode    => '0400',
