@@ -17,8 +17,12 @@ class tada::install (
   ensure_resource('package', ['git', 'libyaml'], {'ensure' => 'present'})
   
   include augeas
-  
-  package { ['cups', 'xinetd', 'postgresql-devel'] : }
+
+  # for creating python package rpms
+  package { ['rpm-build', 'ruby', 'rubygems', 'ruby-devel'] : }
+  # exec: fpm --python-bin python3 -s python -t rpm setup.py
+
+  package { ['xinetd', 'postgresql-devel'] : }
   yumrepo { 'ius':
     descr      => 'ius - stable',
     baseurl    => 'http://dl.iuscommunity.org/pub/ius/stable/CentOS/6/x86_64/',
@@ -29,16 +33,16 @@ class tada::install (
   }
   -> Package<| provider == 'yum' |>
 
-  yumrepo { 'tada':
-    descr    => 'tada',
+  yumrepo { 'python-tada':
+    descr    => 'python-tada',
     baseurl  => "http://mirrors.sdm.noao.edu/tada",
     enabled  => 1,
     gpgcheck => 0,
     priority => 1,
     mirrorlist => absent,
   }
-  yumrepo { 'dataq':
-    descr    => 'dataq',
+  yumrepo { 'python-dataq':
+    descr    => 'python-dataq',
     baseurl  => "http://mirrors.sdm.noao.edu/dataq",
     enabled  => 1,
     gpgcheck => 0,
@@ -75,7 +79,7 @@ class tada::install (
   python::requirements { '/etc/tada/requirements.txt':
     owner  => 'root',
   } ->
-  package{ ['dataq', 'tada'] : }
+  package{ ['python-dataq', 'python-tada'] : }
   
   #! Class['python']
   #! -> Package['python34u-pip']
