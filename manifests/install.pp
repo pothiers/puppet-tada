@@ -19,7 +19,7 @@ ensure_resource('package', ['git', 'libyaml', 'ruby'], {'ensure' => 'present'})
   include augeas
 
   # for creating python package rpms
-  package { ['rpm-build',  'rubygems', 'ruby-devel'] : }
+  #! package { ['rpm-build',  'rubygems', 'ruby-devel'] : }
   # exec: fpm --python-bin python3 -s python -t rpm setup.py
 
   package { ['xinetd', 'postgresql-devel'] : }
