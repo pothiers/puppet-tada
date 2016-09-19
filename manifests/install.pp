@@ -14,12 +14,12 @@ class tada::install (
   # these are also given by: puppet-sdm
   #! include epel
   #!package { ['git', ]: }
-  ensure_resource('package', ['git', 'libyaml'], {'ensure' => 'present'})
+ensure_resource('package', ['git', 'libyaml', 'ruby'], {'ensure' => 'present'})
   
   include augeas
 
   # for creating python package rpms
-  package { ['rpm-build', 'ruby', 'rubygems', 'ruby-devel'] : }
+  package { ['rpm-build',  'rubygems', 'ruby-devel'] : }
   # exec: fpm --python-bin python3 -s python -t rpm setup.py
 
   package { ['xinetd', 'postgresql-devel'] : }
