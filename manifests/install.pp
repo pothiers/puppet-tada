@@ -79,7 +79,10 @@ ensure_resource('package', ['git', 'libyaml'], {'ensure' => 'present'})
   python::requirements { '/etc/tada/requirements.txt':
     owner  => 'root',
   } ->
-  package{ ['python-dataq', 'python-tada'] : }
+
+  package{ ['python-dataq', 'python-tada'] :
+    ensure => 'installed';  #  or <version number>, or 'latest'
+  }
   
   #! Class['python']
   #! -> Package['python34u-pip']
@@ -143,7 +146,12 @@ ensure_resource('package', ['git', 'libyaml'], {'ensure' => 'present'})
     ensure  => present,
     replace => false,
     source  => 'puppet:///modules/tada/fitsverify',
-    }
+  }
+  # just so LOGROTATE doesn't complain if it runs before we rsync
+  file { '/var/log/rsyncd.log' :
+    ensure  => present,
+    replace => false,
+  }
 }
 
 
