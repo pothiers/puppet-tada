@@ -14,7 +14,7 @@ class tada::service  (
                         '/etc/tada/tada.conf'
                         ],
                   Class['redis'],
-                  Python::Requirements[ '/etc/tada/requirements.txt'],
+                  Python::Requirements[ '/opt/tada/requirements.txt'],
                   Package['python-dataq', 'python-tada'],
                   ],
     enable   => true,
@@ -27,7 +27,7 @@ class tada::service  (
     subscribe => [File ['/etc/tada/watchpushd.conf',
                         '/etc/init.d/watchpushd'
                         ],
-                  Python::Requirements[ '/etc/tada/requirements.txt'],
+                  Python::Requirements[ '/opt/tada/requirements.txt'],
                   Package['python-dataq', 'python-tada']
                   ],
     enable    => true,

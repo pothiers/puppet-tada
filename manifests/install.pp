@@ -62,23 +62,36 @@ ensure_resource('package', ['git', 'libyaml'], {'ensure' => 'present'})
 #!  -> Package<| provider == 'yum' |>
 #! ensure_resource('package', ['mcollective-facter-facts', ], {'ensure' => 'present'})  
   
-  package { ['python34u-pip']: } ->
-  class { 'python':
-    version    => '34u',
-    pip        => false,
-    dev        => true,
+  #!package { ['python34u-pip']: } ->
+  #!class { 'python':
+  #!  version    => '34u',
+  #!  pip        => false,
+  #!  dev        => true,
+  #!} ->
+  #!file { '/usr/bin/pip':
+  #!  ensure => 'link',
+  #!  target => '/usr/bin/pip3.4',
+  #!} ->
+  #!file { '/usr/local/bin/python3':
+  #!  ensure => 'link',
+  #!  target => '/usr/bin/python3',
+  #!} ->
+  #!python::requirements { '/etc/tada/requirements.txt':
+  #!  owner  => 'root',
+  #!} ->
+  class { 'python' :
+    version    => 'python35u',
+    pip        => 'present',
+    dev        => 'present',
+    virtualenv => 'absent', # 'present',
+    gunicorn   => 'absent',
+    } ->
+  python::pyvenv  { '/opt/tada/venv':
+    version  => '3.5',
   } ->
-  file { '/usr/bin/pip':
-    ensure => 'link',
-    target => '/usr/bin/pip3.4',
-  } ->
-  file { '/usr/local/bin/python3':
-    ensure => 'link',
-    target => '/usr/bin/python3',
-  } ->
-  python::requirements { '/etc/tada/requirements.txt':
-    owner  => 'root',
-  } ->
+  python::requirements  { '/opt/tada/requirements.txt':
+    virtualenv => '/opt/tada/venv',
+  }
 
   package{ ['python-dataq', 'python-tada'] :
     ensure => 'installed';  #  or <version number>, or 'latest'
