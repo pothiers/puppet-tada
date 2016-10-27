@@ -32,13 +32,6 @@ class tada::config (
   $mars_host           = hiera('mars_host'),
   $mars_port           = hiera('mars_port'),
   ) {
-  user { 'tada' :
-    ensure     => 'present',
-    comment    => 'For running TADA related services and actions',
-    managehome => true,
-    password   => '$1$Pk1b6yel$tPE2h9vxYE248CoGKfhR41',  # tada"Password"
-    system     => true,
-  }
   file { [ '/var/run/tada', '/var/log/tada', '/etc/tada', '/var/tada']:
     ensure => 'directory',
     owner  => 'tada',

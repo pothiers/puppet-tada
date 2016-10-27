@@ -50,6 +50,33 @@ ensure_resource('package', ['git', 'libyaml'], {'ensure' => 'present'})
     mirrorlist => absent,
   }
   -> Package<| provider == 'yum' |>
+  #!-> package{ ['python-dataq', 'python-tada'] :
+  #!  ensure => 'installed';  #  or <version number>, or 'latest'
+  #!}
+
+  exec { 'install tada':
+    cwd     => '/opt/tada',
+    command => '/opt/tada/venv/bin/python3 setup.py install',
+    creates => '/opt/tada/venv/bin/direct_submit',
+    user    => 'tada',
+    require  => [
+      File['/opt/tada/venv'],
+      Python::Requirements['/opt/tada/requirements.txt'],
+    ],
+  } -> 
+  exec { 'install dataq':
+    cwd     => '/opt/data-queue',
+    command => '/opt/tada/venv/bin/python3 setup.py install',
+    creates => '/opt/tada/venv/bin/dqsvcpop',
+    user    => 'tada',
+    notify  => [Service['watchpushd'], Service['dqd'], ],
+    require  => [
+      File['/opt/tada/venv'],
+      Python::Requirements['/opt/tada/requirements.txt'],
+    ],
+  }
+
+  
  
 #!  yumrepo { 'dmo':
 #!    descr    => 'dmo',
@@ -88,14 +115,15 @@ ensure_resource('package', ['git', 'libyaml'], {'ensure' => 'present'})
     } ->
   python::pyvenv  { '/opt/tada/venv':
     version  => '3.5',
+    owner    => 'tada',
+    require  => [ User['tada'], ],
   } ->
   python::requirements  { '/opt/tada/requirements.txt':
     virtualenv => '/opt/tada/venv',
+    owner    => 'tada',
+    require  => [ User['tada'], ],
   }
 
-  package{ ['python-dataq', 'python-tada'] :
-    ensure => 'installed';  #  or <version number>, or 'latest'
-  }
   
   #! Class['python']
   #! -> Package['python34u-pip']
@@ -116,11 +144,34 @@ ensure_resource('package', ['git', 'libyaml'], {'ensure' => 'present'})
     source   => 'https://github.com/NOAO/tada-cli.git',
     revision => 'master',
   }
+  user { 'tada' :
+    ensure     => 'present',
+    comment    => 'For running TADA related services and actions',
+    managehome => true,
+    password   => '$1$Pk1b6yel$tPE2h9vxYE248CoGKfhR41',  # tada"Password"
+    system     => true,
+  } 
   vcsrepo { '/opt/tada' :
     ensure   => latest,
     provider => git,
     source   => 'https://github.com/pothiers/tada.git',
     revision => 'master',
+    owner    => 'tada',
+    group    => 'tada',
+    require  => [
+      User['tada'],
+    ],
+  } 
+  vcsrepo { '/opt/data-queue' :
+    ensure   => latest,
+    provider => git,
+    source   => 'https://github.com/pothiers/data-queue.git',
+    revision => 'master',
+    owner    => 'tada',
+    group    => 'tada',
+    require  => [
+      User['tada'],
+    ],
   }
 
   file { '/usr/local/share/applications/fpack.tgz':

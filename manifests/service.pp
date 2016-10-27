@@ -3,9 +3,11 @@
 # https://docs.puppetlabs.com/guides/module_guides/bgtm.html
 
 class tada::service  (
-  $printer  = 'astro',             
   $cache    = '/var/tada/cache',  
   ) {  
+
+  ## source /opt/tada/venv/bin/activate  
+
   service { 'dqd':
     ensure   => 'running',
     subscribe => [File ['/etc/tada/dqd.conf',
@@ -15,7 +17,7 @@ class tada::service  (
                         ],
                   Class['redis'],
                   Python::Requirements[ '/opt/tada/requirements.txt'],
-                  Package['python-dataq', 'python-tada'],
+                  #! Package['python-dataq', 'python-tada'],
                   ],
     enable   => true,
     provider => 'redhat',
@@ -28,7 +30,7 @@ class tada::service  (
                         '/etc/init.d/watchpushd'
                         ],
                   Python::Requirements[ '/opt/tada/requirements.txt'],
-                  Package['python-dataq', 'python-tada']
+                  #! Package['python-dataq', 'python-tada']
                   ],
     enable    => true,
     provider  => 'redhat',
