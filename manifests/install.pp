@@ -113,6 +113,10 @@ ensure_resource('package', ['git', 'libyaml'], {'ensure' => 'present'})
     virtualenv => 'absent', # 'present',
     gunicorn   => 'absent',
     } ->
+  file { '/usr/bin/python3':
+    ensure => 'link',
+    target => '/usr/bin/python3.5',
+    } ->
   python::pyvenv  { '/opt/tada/venv':
     version  => '3.5',
     owner    => 'tada',
