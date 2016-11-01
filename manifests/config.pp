@@ -159,14 +159,14 @@ mars_port: ${mars_port}
     mode    => '0774',
   }
 
-  file { '/etc/tada/pre-transfer.sh':
-    ensure  => 'present',
-    replace => false,
-    source  => 'puppet:///modules/dmo-hiera/pre-transfer.sh',
-    owner   => 'tada',
-    group   => 'tada',
-    mode    => '0774',
-  }
+#!  file { '/etc/tada/pre-transfer.sh':
+#!    ensure  => 'present',
+#!    replace => false,
+#!    source  => 'puppet:///modules/dmo-hiera/pre-transfer.sh',
+#!    owner   => 'tada',
+#!    group   => 'tada',
+#!    mode    => '0774',
+#!  }
   file { '/etc/tada/pop.yaml':
     ensure  => 'present',
     replace => false,
