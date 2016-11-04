@@ -2,7 +2,10 @@
 class tada::install (
   $fpacktgz    = hiera('fpacktgz', 'puppet:///modules/tada/fpack-bin-centos-6.6.tgz'),
   $irodstgz    = hiera('irodstgz', 'puppet:///tada/irods-3.3.1.tgz'),
+  $tadaversion = hiera('tadaversion', 'master'),
+  $dataqversion = hiera('dataqversion', 'master'),
   ) {
+  notice("Loading tada::install; tadaversion=${tadaversion}, dataqversion=${dataqversion}")
   
   $stamp=strftime("%Y-%m-%d %H:%M:%S")
   
@@ -33,27 +36,28 @@ ensure_resource('package', ['git', 'libyaml'], {'ensure' => 'present'})
   }
   -> Package<| provider == 'yum' |>
 
-  yumrepo { 'python-tada':
-    descr    => 'python-tada',
-    baseurl  => "http://mirrors.sdm.noao.edu/tada",
-    enabled  => 1,
-    gpgcheck => 0,
-    priority => 1,
-    mirrorlist => absent,
-  }
-  yumrepo { 'python-dataq':
-    descr    => 'python-dataq',
-    baseurl  => "http://mirrors.sdm.noao.edu/dataq",
-    enabled  => 1,
-    gpgcheck => 0,
-    priority => 1,
-    mirrorlist => absent,
-  }
-  -> Package<| provider == 'yum' |>
+  #!yumrepo { 'python-tada':
+  #!  descr    => 'python-tada',
+  #!  baseurl  => "http://mirrors.sdm.noao.edu/tada",
+  #!  enabled  => 1,
+  #!  gpgcheck => 0,
+  #!  priority => 1,
+  #!  mirrorlist => absent,
+  #!}
+  #!yumrepo { 'python-dataq':
+  #!  descr    => 'python-dataq',
+  #!  baseurl  => "http://mirrors.sdm.noao.edu/dataq",
+  #!  enabled  => 1,
+  #!  gpgcheck => 0,
+  #!  priority => 1,
+  #!  mirrorlist => absent,
+  #!}
+  #!-> Package<| provider == 'yum' |>
   #!-> package{ ['python-dataq', 'python-tada'] :
   #!  ensure => 'installed';  #  or <version number>, or 'latest'
   #!}
 
+  # These install tada,dataq from source in /opt/tada,data-queue
   exec { 'install tada':
     cwd     => '/opt/tada',
     command => '/opt/tada/venv/bin/python3 setup.py install',
@@ -63,7 +67,7 @@ ensure_resource('package', ['git', 'libyaml'], {'ensure' => 'present'})
       File['/opt/tada/venv'],
       Python::Requirements['/opt/tada/requirements.txt'],
     ],
-  } -> 
+  } 
   exec { 'install dataq':
     cwd     => '/opt/data-queue',
     command => '/opt/tada/venv/bin/python3 setup.py install',
@@ -156,26 +160,26 @@ ensure_resource('package', ['git', 'libyaml'], {'ensure' => 'present'})
     system     => true,
   } 
   vcsrepo { '/opt/tada' :
-    ensure   => latest,
+    #!ensure   => latest,
+    ensure   => present,
     provider => git,
     source   => 'https://github.com/pothiers/tada.git',
-    revision => 'master',
+    #!revision => 'master',
+    revision => "${tadaversion}",
     owner    => 'tada',
     group    => 'tada',
-    require  => [
-      User['tada'],
-    ],
+    require  => User['tada'],
+    notify   => Exec['install tada'],
   } 
   vcsrepo { '/opt/data-queue' :
-    ensure   => latest,
+    ensure   => present,
     provider => git,
     source   => 'https://github.com/pothiers/data-queue.git',
-    revision => 'master',
+    revision => "${dataqversion}",
     owner    => 'tada',
     group    => 'tada',
-    require  => [
-      User['tada'],
-    ],
+    require  => User['tada'],
+    notify   => Exec['install dataq'],
   }
 
   file { '/usr/local/share/applications/fpack.tgz':

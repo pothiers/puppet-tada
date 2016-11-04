@@ -18,6 +18,8 @@ class tada::service  (
                   Class['redis'],
                   Python::Requirements[ '/opt/tada/requirements.txt'],
                   #! Package['python-dataq', 'python-tada'],
+                  Exec['install tada'],
+                  Exec['install dataq'],
                   ],
     enable   => true,
     provider => 'redhat',
@@ -30,7 +32,9 @@ class tada::service  (
                         '/etc/init.d/watchpushd'
                         ],
                   Python::Requirements[ '/opt/tada/requirements.txt'],
-                  #! Package['python-dataq', 'python-tada']
+                  #! Package['python-dataq', 'python-tada'],
+                  Exec['install tada'],
+                  Exec['install dataq'],
                   ],
     enable    => true,
     provider  => 'redhat',
