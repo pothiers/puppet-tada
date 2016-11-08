@@ -120,7 +120,7 @@ class tada::config (
   }
   file { '/home/tester/.tada':
     ensure  => 'directory',
-    owner   => 'tada',
+    owner   => 'tester',
     group   => 'tada',
     mode    => '0744',
   }
