@@ -63,7 +63,8 @@ ensure_resource('package', ['git', 'libyaml'], {'ensure' => 'present'})
     command => '/opt/tada/venv/bin/python3 setup.py install',
     creates => '/opt/tada/venv/bin/direct_submit',
     user    => 'tada',
-    require  => [
+    subscribe => [
+      Vcsrepo['/opt/tada'], 
       File['/opt/tada/venv'],
       Python::Requirements['/opt/tada/requirements.txt'],
     ],
@@ -74,7 +75,7 @@ ensure_resource('package', ['git', 'libyaml'], {'ensure' => 'present'})
     creates => '/opt/tada/venv/bin/dqsvcpop',
     user    => 'tada',
     notify  => [Service['watchpushd'], Service['dqd'], ],
-    require  => [
+    subscribe => [
       File['/opt/tada/venv'],
       Python::Requirements['/opt/tada/requirements.txt'],
     ],
