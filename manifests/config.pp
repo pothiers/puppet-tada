@@ -7,6 +7,7 @@ class tada::config (
   $dqcli_log_conf = hiera('dqcli_logging_conf'),
   $watch_log_conf = hiera('watch_logging_conf'),
   $tada_conf      = hiera('tada_conf'),
+  $smoke_conf     = hiera('smoke_conf'),
   $host_type      = hiera('tada_host_type'),
   #$dqd_conf       = hiera('dqd_conf'),
   $dq_loglevel    = hiera('dq_loglevel'),
@@ -130,6 +131,13 @@ class tada::config (
     owner   => 'tada',
     group   => 'tada',
     mode    => '0777',
+  }
+  file {  '/etc/tada/smoke-config.sh':
+    ensure  => 'present',
+    replace => false,
+    source  => "${smoke_conf}",
+    group   => 'root',
+    mode    => '0774',
   }
   file {  '/etc/tada/tada.conf':
     ensure  => 'present',
@@ -328,6 +336,11 @@ dqlevel=${dq_loglevel}
     ensure  => 'present',
     replace => false,
     owner   => 'tada',
+    source  => "${irodsdata}",
+  }
+  file { '/etc/tada/iinit.in':
+    ensure  => 'present',
+    replace => false,
     source  => "${irodsdata}",
   }
   exec { 'iinit':
