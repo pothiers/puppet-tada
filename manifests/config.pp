@@ -121,8 +121,7 @@ class tada::config (
   file { '/home/tester/.tada/rsync.pwd':
     ensure  => 'present',
     replace => false,
-    owner   => 'tada',
-    group   => 'tada',
+    owner   => 'tester',
     mode    => '0400',
     source  => "${rsyncpwd}",
   }
