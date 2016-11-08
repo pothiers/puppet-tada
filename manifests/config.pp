@@ -118,6 +118,14 @@ class tada::config (
     mode    => '0400',
     source  => "${rsyncpwd}",
   }
+  file { '/home/tester/.tada/rsync.pwd':
+    ensure  => 'present',
+    replace => false,
+    owner   => 'tada',
+    group   => 'tada',
+    mode    => '0400',
+    source  => "${rsyncpwd}",
+  }
   file { ['/var/log/tada/pop.log', '/var/log/tada/pop-detail.log']:
     ensure  => 'present',
     replace => false,
