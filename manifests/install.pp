@@ -153,6 +153,9 @@ ensure_resource('package', ['git', 'libyaml'], {'ensure' => 'present'})
     source   => 'https://github.com/NOAO/tada-cli.git',
     revision => 'master',
   }
+  group { 'tada':
+    ensure => 'present',
+  }
   user { 'tada' :
     ensure     => 'present',
     comment    => 'For running TADA related services and actions',
