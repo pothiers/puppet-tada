@@ -333,7 +333,7 @@ dqlevel=${dq_loglevel}
   }
 
   ###########################################################################
-  ### irods: only needed for valley but ok for mountain too
+  ### irods: only needed for valley but ok for mountain too; added for "tester" user
   ###
   file { '/home/tada/.irods':
     ensure => 'directory',
@@ -362,14 +362,43 @@ dqlevel=${dq_loglevel}
     command     => "${icmdpath}/iinit `cat /home/tada/.irods/iinit.in`",
     user        => 'tada',
     creates     => '/home/tada/.irods/.irodsA',
-    require     => [Exec['unpack irods'],
+    subscribe   => [Exec['unpack irods'],
                     File[ '/home/tada/.irods/.irodsEnv',
                           '/home/tada/.irods/iinit.in']],
   }
+  ### TESTER user
+  file { '/home/tester/.irods':
+    ensure => 'directory',
+    owner  => 'tada',
+  }
+  file { '/home/tester/.irods/.irodsEnv':
+    ensure  => 'present',
+    replace => false,
+    owner   => 'tada',
+    source  => "${irodsenv}",
+  }
+  file { '/home/tester/.irods/iinit.in':
+    ensure  => 'present',
+    replace => false,
+    owner   => 'tada',
+    source  => "${irodsdata}",
+  }
+  exec { 'iinit':
+    environment => ['irodsEnvFile=/home/tester/.irods/.irodsEnv',
+                    'HOME=/home/tester' ],
+    command     => "${icmdpath}/iinit `cat /home/tester/.irods/iinit.in`",
+    user        => 'tada',
+    creates     => '/home/tester/.irods/.irodsA',
+    subscribe   => [Exec['unpack irods'],
+                    File[ '/home/tester/.irods/.irodsEnv',
+                          '/home/tester/.irods/iinit.in']],
+  }
+  
   file { '/etc/logrotate.d/tada':
     ensure  => 'present',
     replace => false,
     source  => 'puppet:///modules/tada/tada.logrotate',
   }
+  
   }
 
