@@ -383,7 +383,7 @@ dqlevel=${dq_loglevel}
     owner   => 'tada',
     source  => "${irodsdata}",
   }
-  exec { 'iinit':
+  exec { 'iinit tester':
     environment => ['irodsEnvFile=/home/tester/.irods/.irodsEnv',
                     'HOME=/home/tester' ],
     command     => "${icmdpath}/iinit `cat /home/tester/.irods/iinit.in`",
