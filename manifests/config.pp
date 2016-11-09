@@ -369,25 +369,25 @@ dqlevel=${dq_loglevel}
   ### TESTER user
   file { '/home/tester/.irods':
     ensure => 'directory',
-    owner  => 'tada',
+    owner  => 'tester',
   }
   file { '/home/tester/.irods/.irodsEnv':
     ensure  => 'present',
     replace => false,
-    owner   => 'tada',
+    owner   => 'tester',
     source  => "${irodsenv}",
   }
   file { '/home/tester/.irods/iinit.in':
     ensure  => 'present',
     replace => false,
-    owner   => 'tada',
+    owner   => 'tester',
     source  => "${irodsdata}",
   }
   exec { 'iinit tester':
     environment => ['irodsEnvFile=/home/tester/.irods/.irodsEnv',
                     'HOME=/home/tester' ],
     command     => "${icmdpath}/iinit `cat /home/tester/.irods/iinit.in`",
-    user        => 'tada',
+    user        => 'tester',
     creates     => '/home/tester/.irods/.irodsA',
     subscribe   => [Exec['unpack irods'],
                     File[ '/home/tester/.irods/.irodsEnv',
