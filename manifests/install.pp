@@ -183,11 +183,16 @@ ensure_resource('package', ['git', 'libyaml'], {'ensure' => 'present'})
     require  => User['tada'],
     notify   => Exec['install tada'],
     } ->
-    file { '/opt/tada/tests/smoke':
+  file { '/opt/tada/tests/smoke':
       ensure  => directory,
       mode    => '0774',
       recurse => true,
-      }
+      } ->
+  file { '/opt/tada/tests/smoke/smoke.all.sh':
+    ensure => present,
+    owner  => 'tester',
+    mode   => 'u+s',
+  }
   vcsrepo { '/opt/data-queue' :
     ensure   => present,
     provider => git,

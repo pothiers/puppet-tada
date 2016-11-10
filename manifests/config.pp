@@ -32,6 +32,9 @@ class tada::config (
   $valley_host         = hiera('valley_host'),
   $mars_host           = hiera('mars_host'),
   $mars_port           = hiera('mars_port'),
+  $tadaversion         = hiera('tadaversion'),
+  $dataqversion        = hiera('dataqversion'),
+  $marsversion         = hiera('marsversion'),
   ) {
   file { [ '/var/run/tada', '/var/log/tada', '/etc/tada', '/var/tada']:
     ensure => 'directory',
@@ -159,7 +162,7 @@ class tada::config (
     group   => 'root',
     mode    => '0774',
   }
-  file {  '/etc/tada/hiera.yaml':
+  file {  '/etc/tada/hiera.yaml': # I should name this differently!!!
     ensure  => 'present',
     replace => false,
     content => "---
@@ -175,6 +178,9 @@ archive_irods331: ${archive_irods331}
 valley_host: ${valley_host}
 mars_host: ${mars_host}
 mars_port: ${mars_port}
+tadaversion: ${tadaversion}
+dataqversion: ${dataqversion}
+marsversion: ${marsversion}
 ",
     group   => 'root',
     mode    => '0774',
