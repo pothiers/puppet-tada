@@ -60,7 +60,7 @@ ensure_resource('package', ['git', 'libyaml'], {'ensure' => 'present'})
   # These install tada,dataq from source in /opt/tada,data-queue
   exec { 'install tada':
     cwd     => '/opt/tada',
-    command => '/opt/tada/venv/bin/python3 setup.py install',
+    command => "/bin/bash -c 'source /opt/tada/venv/bin/activate; /opt/tada/venv/bin/python3 setup.py install --force'",
     creates => '/opt/tada/venv/bin/direct_submit',
     user    => 'tada',
     subscribe => [
@@ -71,12 +71,12 @@ ensure_resource('package', ['git', 'libyaml'], {'ensure' => 'present'})
   } 
   exec { 'install dataq':
     cwd     => '/opt/data-queue',
-    command => '/opt/tada/venv/bin/python3 setup.py install',
+    command => "/bin/bash -c 'source /opt/tada/venv/bin/activate; /opt/tada/venv/bin/python3 setup.py install --force'",
     creates => '/opt/tada/venv/bin/dqsvcpop',
     user    => 'tada',
     notify  => [Service['watchpushd'], Service['dqd'], ],
     subscribe => [
-      File['/opt/tada/venv'],
+      File['/opt/tada/venv', '/etc/tada/hiera.yaml'],
       Python::Requirements['/opt/tada/requirements.txt'],
     ],
   }
@@ -172,8 +172,7 @@ ensure_resource('package', ['git', 'libyaml'], {'ensure' => 'present'})
     system     => false,
   } 
   vcsrepo { '/opt/tada' :
-    #!ensure   => latest,
-    ensure   => present,
+    ensure   => latest,
     provider => git,
     source   => 'https://github.com/pothiers/tada.git',
     #!revision => 'master',
@@ -194,7 +193,7 @@ ensure_resource('package', ['git', 'libyaml'], {'ensure' => 'present'})
     mode   => 'u+s',
   }
   vcsrepo { '/opt/data-queue' :
-    ensure   => present,
+    ensure   => latest,
     provider => git,
     source   => 'https://github.com/pothiers/data-queue.git',
     revision => "${dataqversion}",
