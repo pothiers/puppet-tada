@@ -164,7 +164,7 @@ class tada::config (
   }
   file {  '/etc/tada/hiera.yaml': # I should name this differently!!!
     ensure  => 'present',
-    replace => false,
+    replace => true,
     content => "---
 dq_host: ${dq_host}
 dq_port: ${dq_port}
