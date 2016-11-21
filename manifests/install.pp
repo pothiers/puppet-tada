@@ -125,6 +125,7 @@ ensure_resource('package', ['git', 'libyaml'], {'ensure' => 'present'})
   python::pyvenv  { '/opt/tada/venv':
     version  => '3.5',
     owner    => 'tada',
+    group    => 'tada',
     require  => [ User['tada'], ],
   } ->
   python::requirements  { '/opt/tada/requirements.txt':
