@@ -8,6 +8,10 @@ class tada::service  (
 
   ## source /opt/tada/venv/bin/activate  
 
+  # For exec, use something like:
+    #   unless  => '/usr/bin/pgrep -f "manage.py runserver"',
+    # to prevent running duplicate.  Puppet is supposed to check process table so
+    # duplicate should never happen UNLESS done manually.
   service { 'dqd':
     ensure   => 'running',
     subscribe => [File ['/etc/tada/dqd.conf',

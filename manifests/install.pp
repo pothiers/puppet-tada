@@ -130,6 +130,7 @@ ensure_resource('package', ['git', 'libyaml'], {'ensure' => 'present'})
   python::requirements  { '/opt/tada/requirements.txt':
     virtualenv => '/opt/tada/venv',
     owner    => 'tada',
+    group    => 'tada',
     require  => [ User['tada'], ],
   }
 
@@ -155,7 +156,7 @@ ensure_resource('package', ['git', 'libyaml'], {'ensure' => 'present'})
   }
   group { 'tada':
     ensure => 'present',
-  }
+  } -> 
   user { 'tada' :
     ensure     => 'present',
     comment    => 'For running TADA related services and actions',
@@ -175,9 +176,8 @@ ensure_resource('package', ['git', 'libyaml'], {'ensure' => 'present'})
     ensure   => latest,
     provider => git,
     source   => 'https://github.com/pothiers/tada.git',
-    #!revision => 'master',
     revision => "${tadaversion}",
-    owner    => 'tada',
+    owner    => 'tester', # 'tada',
     group    => 'tada',
     require  => User['tada'],
     notify   => Exec['install tada'],
@@ -186,18 +186,18 @@ ensure_resource('package', ['git', 'libyaml'], {'ensure' => 'present'})
       ensure  => directory,
       mode    => '0774',
       recurse => true,
-      } ->
-  file { '/opt/tada/tests/smoke/smoke.all.sh':
-    ensure => present,
-    owner  => 'tester',
-    mode   => 'u+s',
-  }
+      }
+  #!file { '/opt/tada/tests/smoke/smoke.all.sh':
+  #!  ensure => present,
+  #!  owner  => 'tester',
+  #!  mode   => 'u+s',
+  #!}
   vcsrepo { '/opt/data-queue' :
     ensure   => latest,
     provider => git,
     source   => 'https://github.com/pothiers/data-queue.git',
     revision => "${dataqversion}",
-    owner    => 'tada',
+    owner    => 'tester', #'tada',
     group    => 'tada',
     require  => User['tada'],
     notify   => Exec['install dataq'],
