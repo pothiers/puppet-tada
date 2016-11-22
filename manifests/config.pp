@@ -73,6 +73,9 @@ class tada::config (
     ensure  => 'link',
     replace => false,
     target  => '/var/tada/data/dropbox',
+    owner  => 'tada',
+    group  => 'tada',
+    mode   => '0744',
   }
   file { '/var/tada/nowatch' :
     ensure  => 'link',
