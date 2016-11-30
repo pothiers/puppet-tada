@@ -164,7 +164,7 @@ ensure_resource('package', ['git', 'libyaml'], {'ensure' => 'present'})
     managehome => true,
     password   => '$1$Pk1b6yel$tPE2h9vxYE248CoGKfhR41',  # tada"Password"
     system     => true,
-  } 
+    } 
   user { 'tester' :
     ensure     => 'present',
     comment    => 'For running TADA related tests',

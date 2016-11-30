@@ -408,6 +408,15 @@ dqlevel=${dq_loglevel}
     replace => false,
     source  => 'puppet:///modules/tada/tada.logrotate',
   }
-  
+
+  file { '/home/tester/.ssh/':
+    ensure => 'directory',
+    owner  => 'tester',
+    mode   => '0700',
+  } 
+  file { '/home/tester/.ssh/authorized_keys':
+    owner  => 'tester',
+    mode   => '0600',
+  }
   }
 
