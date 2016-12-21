@@ -25,6 +25,7 @@ class tada::config (
   $dq_port             = hiera('dq_port'),
   $arch_host           = hiera('arch_host'),
   $arch_port           = hiera('arch_port'),
+  $arch_timeout        = hiera('arch_timeout'),
   $arch_irods_host     = hiera('arch_irods_host'),
   $arch_irods_port     = hiera('arch_irods_port'),
   $arch_irods_resource = hiera('arch_irods_resource'),
@@ -174,6 +175,7 @@ dq_port: ${dq_port}
 dq_loglevel: ${dq_loglevel}
 arch_host: ${arch_host}
 arch_port: ${arch_port}
+arch_timeout: ${arch_timeout}
 arch_irods_host: ${arch_irods_host}
 arch_irods_port: ${arch_irods_port}
 arch_irods_resource: ${arch_irods_resource}
