@@ -11,7 +11,7 @@ class tada::install (
   $stamp=strftime("%Y-%m-%d %H:%M:%S")
   exec { 'provision tada':
     path    => '/usr/bin:/usr/sbin:/bin',
-    command => "rm -rf /var/tada /etc/tada/ /var/log/tada /var/run/tada /home/tada/.tada /home/tada/.irods /home/tester/.tada /home/tester/.irods"
+    command => "rm -rf /var/tada /etc/tada/ /var/log/tada /var/run/tada /home/tada/.tada /home/tada/.irods /home/tester/.tada /home/tester/.irods",
     onlyif => 'test \! -f /opt/tada-release',
     } ->
    file { '/opt/tada-release':
