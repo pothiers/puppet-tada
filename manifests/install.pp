@@ -6,8 +6,23 @@ class tada::install (
   $dataqversion = hiera('dataqversion', 'master'),
   ) {
   notice("Loading tada::install; tadaversion=${tadaversion}, dataqversion=${dataqversion}")
-  
+
+  # Top-level dependency to support full tada reinstall
   $stamp=strftime("%Y-%m-%d %H:%M:%S")
+  file { '/opt/tada-release':
+    ensure  => 'present',
+    replace => false,
+    content => "$stamp",
+    notify  => File['/var/tada', '/etc/tada',
+                    '/var/log/tada', '/var/run/tada',
+                    '/var/opt/tada', '/var/opt/data-queue',
+                    '/home/tada/.tada',
+                    '/home/tada/.irods',
+                    '/home/tester/.tada',
+                    '/home/tester/.irods',
+                    ],
+    }
+  
   
   #!exec { 'upgrade-pip':
   #!  command  => '/usr/bin/pip3.4 install --upgrade pip'
