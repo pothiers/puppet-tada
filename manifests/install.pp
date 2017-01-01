@@ -19,7 +19,7 @@ class tada::install (
                     '/home/tada/.tada',
                     '/home/tada/.irods',
                     '/home/tester/.tada',
-                    '/home/tester/.irods',
+                    '/home/tester/.irods'
                     ],
     }
   
