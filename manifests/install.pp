@@ -9,23 +9,31 @@ class tada::install (
 
   # Top-level dependency to support full tada reinstall
   $stamp=strftime("%Y-%m-%d %H:%M:%S")
-  file { '/opt/tada-release':
+  exec { 'provision tada':
+    path    => '/usr/bin:/usr/sbin:/bin',
+    command => "rm -rf /var/tada /etc/tada/ /var/log/tada /var/run/tada /home/tada/.tada /home/tada/.irods /home/tester/.tada /home/tester/.irods"
+    onlyif => 'test \! -f /opt/tada-release',
+    } ->
+   file { '/opt/tada-release':
     ensure  => 'present',
     replace => false,
-    content => "$stamp",
-    notify  => [File['/var/tada', '/etc/tada',
-                    '/var/log/tada', '/var/run/tada',
-                    '/home/tada/.tada',
-                    '/home/tada/.irods',
-                    '/home/tester/.tada',
-                    '/home/tester/.irods'
+    content => "$stamp
+",
+    notify  => [File['/var/tada',
+                     '/etc/tada',
+                     '/var/log/tada',
+                     '/var/run/tada',
+                     '/home/tada/.tada',
+                     '/home/tada/.irods',
+                     '/home/tester/.tada',
+                     '/home/tester/.irods'
                      ],
                 Vcsrepo['/opt/tada',
                         '/opt/tada-cli',
                         '/opt/data-queue'
                         ]
                 ]
-    }
+  }
   
   
   #!exec { 'upgrade-pip':
