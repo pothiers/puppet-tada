@@ -15,7 +15,7 @@ class tada::install (
     content => "$stamp",
     notify  => File['/var/tada', '/etc/tada',
                     '/var/log/tada', '/var/run/tada',
-                    '/var/opt/tada', '/var/opt/data-queue',
+                    '/opt/tada', '/opt/data-queue',
                     '/home/tada/.tada',
                     '/home/tada/.irods',
                     '/home/tester/.tada',
