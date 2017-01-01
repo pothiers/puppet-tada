@@ -13,14 +13,18 @@ class tada::install (
     ensure  => 'present',
     replace => false,
     content => "$stamp",
-    notify  => File['/var/tada', '/etc/tada',
+    notify  => [File['/var/tada', '/etc/tada',
                     '/var/log/tada', '/var/run/tada',
-                    '/opt/tada', '/opt/data-queue',
                     '/home/tada/.tada',
                     '/home/tada/.irods',
                     '/home/tester/.tada',
                     '/home/tester/.irods'
-                    ],
+                     ],
+                Vcsrepo['/opt/tada',
+                        '/opt/tada-cli',
+                        '/opt/data-queue'
+                        ]
+                ]
     }
   
   
