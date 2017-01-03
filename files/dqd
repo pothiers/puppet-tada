@@ -16,7 +16,7 @@ cmd="/opt/tada/venv/bin/dqsvcpop --loglevel ${dqlevel} --queue ${qname}"
 
 user="tada"
 
-name=`basename $0`
+name=dqd
 pid_file="/var/run/tada/$name.pid"
 stdout_log="/var/log/tada/$name.log"
 stderr_log="/var/log/tada/$name.err"

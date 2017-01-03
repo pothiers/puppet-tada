@@ -15,7 +15,7 @@ dir="/var/tada"
 cmd="/opt/tada/venv/bin/watch_drops --loglevel ${loglevel}"
 user="tada"
 
-name=`basename $0`
+name=watchpushd
 pid_file="/var/run/tada/$name.pid"
 stdout_log="/var/log/tada/$name.log"
 stderr_log="/var/log/tada/$name.err"
