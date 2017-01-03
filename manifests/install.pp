@@ -7,7 +7,8 @@ class tada::install (
   ) {
   notice("Loading tada::install; tadaversion=${tadaversion}, dataqversion=${dataqversion}")
 
-  # Top-level dependency to support full tada reinstall
+  # Top-level dependency to support full tada re-provision
+  # To force re-provision: "rm /opt/tada-release" on BOTH mtn and valley
   $stamp=strftime("%Y-%m-%d %H:%M:%S")
   exec { 'provision tada':
     path    => '/usr/bin:/usr/sbin:/bin',
