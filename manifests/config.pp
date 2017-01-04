@@ -235,7 +235,7 @@ marsversion: ${marsversion}
   }
   file { '/etc/init.d/dqd':
     ensure => 'present',
-    replace => false,
+    replace => true,
     source => 'puppet:///modules/tada/dqd',
     owner  => 'tada',
     mode   => '0777',
@@ -262,7 +262,7 @@ dqlevel=${dq_loglevel}
   }
   file { '/etc/init.d/watchpushd':
     ensure => 'present',
-    replace => false,
+    replace => true,
     source => 'puppet:///modules/tada/watchpushd',
     owner  => 'tada',
     mode   => '0777',
