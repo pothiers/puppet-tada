@@ -12,7 +12,7 @@ class tada::install (
   $stamp=strftime("%Y-%m-%d %H:%M:%S")
   exec { 'provision tada':
     path    => '/usr/bin:/usr/sbin:/bin',
-    command => "rm -rf /var/tada /etc/tada/ /var/log/tada /var/run/tada /home/tada/.tada /home/tada/.irods /home/tester/.tada /home/tester/.irods",
+    command => "rm -rf /etc/tada/ /var/log/tada /var/run/tada /home/tada/.tada /home/tada/.irods /home/tester/.tada /home/tester/.irods",
     onlyif => 'test \! -f /opt/tada-release',
     } ->
    file { '/opt/tada-release':
@@ -20,7 +20,7 @@ class tada::install (
     replace => false,
     content => "$stamp
 ",
-    notify  => [File['/var/tada',
+    notify  => [File[#'/var/tada', # do NOT change history on reprovision!
                      '/etc/tada',
                      '/var/log/tada',
                      '/var/run/tada',

@@ -99,7 +99,7 @@ class tada::config (
   }
   file { '/var/tada/personalities':
     ensure  => 'link',
-    replace => false,
+    replace => true,
     #owner   => 'tada',
     #group   => 'tada',
     #mode    => '0744',
