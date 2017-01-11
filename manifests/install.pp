@@ -36,16 +36,8 @@ class tada::install (
                 ]
   }
   
-  
-  #!exec { 'upgrade-pip':
-  #!  command  => '/usr/bin/pip3.4 install --upgrade pip'
-  #!}
-  
-
   # these are also given by: puppet-sdm
-  #! include epel
-  #!package { ['git', ]: }
-ensure_resource('package', ['git', 'libyaml'], {'ensure' => 'present'})
+  ensure_resource('package', ['git', 'libyaml'], {'ensure' => 'present'})
   
   include augeas
 
@@ -64,26 +56,6 @@ ensure_resource('package', ['git', 'libyaml'], {'ensure' => 'present'})
   }
   -> Package<| provider == 'yum' |>
 
-  #!yumrepo { 'python-tada':
-  #!  descr    => 'python-tada',
-  #!  baseurl  => "http://mirrors.sdm.noao.edu/tada",
-  #!  enabled  => 1,
-  #!  gpgcheck => 0,
-  #!  priority => 1,
-  #!  mirrorlist => absent,
-  #!}
-  #!yumrepo { 'python-dataq':
-  #!  descr    => 'python-dataq',
-  #!  baseurl  => "http://mirrors.sdm.noao.edu/dataq",
-  #!  enabled  => 1,
-  #!  gpgcheck => 0,
-  #!  priority => 1,
-  #!  mirrorlist => absent,
-  #!}
-  #!-> Package<| provider == 'yum' |>
-  #!-> package{ ['python-dataq', 'python-tada'] :
-  #!  ensure => 'installed';  #  or <version number>, or 'latest'
-  #!}
 
   # These install tada,dataq from source in /opt/tada,data-queue
   exec { 'install tada':
@@ -109,36 +81,6 @@ ensure_resource('package', ['git', 'libyaml'], {'ensure' => 'present'})
     ],
   }
 
-  
- 
-#!  yumrepo { 'dmo':
-#!    descr    => 'dmo',
-#!    baseurl  => "http://mirrors.sdm.noao.edu/dmo",
-#!    enabled  => 1,
-#!    gpgcheck => 0,
-#!    priority => 1,
-#!    mirrorlist => absent,
-#!  }
-#!  -> Package<| provider == 'yum' |>
-#! ensure_resource('package', ['mcollective-facter-facts', ], {'ensure' => 'present'})  
-  
-  #!package { ['python34u-pip']: } ->
-  #!class { 'python':
-  #!  version    => '34u',
-  #!  pip        => false,
-  #!  dev        => true,
-  #!} ->
-  #!file { '/usr/bin/pip':
-  #!  ensure => 'link',
-  #!  target => '/usr/bin/pip3.4',
-  #!} ->
-  #!file { '/usr/local/bin/python3':
-  #!  ensure => 'link',
-  #!  target => '/usr/bin/python3',
-  #!} ->
-  #!python::requirements { '/etc/tada/requirements.txt':
-  #!  owner  => 'root',
-  #!} ->
   class { 'python' :
     version    => 'python35u',
     pip        => 'present',
@@ -216,11 +158,6 @@ ensure_resource('package', ['git', 'libyaml'], {'ensure' => 'present'})
       mode    => '0774',
       recurse => true,
       }
-  #!file { '/opt/tada/tests/smoke/smoke.all.sh':
-  #!  ensure => present,
-  #!  owner  => 'tester',
-  #!  mode   => 'u+s',
-  #!}
   vcsrepo { '/opt/data-queue' :
     ensure   => latest,
     provider => git,
