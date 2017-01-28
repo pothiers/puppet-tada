@@ -100,11 +100,16 @@ class tada::install (
   } ->
   python::requirements  { '/opt/tada/requirements.txt':
     virtualenv => '/opt/tada/venv',
-    owner    => 'tada',
-    group    => 'tada',
-    require  => [ User['tada'], ],
-  }
-
+    owner      => 'tada',
+    group      => 'tada',
+    require    => [ User['tada'], ],
+ }->
+ python::pip { 'pylint' :
+   pkgname    => 'pylint',
+   ensure     => 'latest',
+   virtualenv => '/opt/tada/venv',   
+   owner      => 'tada',
+   }
   
   #! Class['python']
   #! -> Package['python34u-pip']
