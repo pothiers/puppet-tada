@@ -211,6 +211,11 @@ class tada::install (
     replace => false,
     source  => 'puppet:///modules/tada/fitsverify',
   }
+  file { '/usr/local/bin/fitscopy' :
+    ensure  => present,
+    replace => false,
+    source  => 'puppet:///modules/tada/fitscopy',
+  }
   # just so LOGROTATE doesn't complain if it runs before we rsync
   file { '/var/log/rsyncd.log' :
     ensure  => present,
