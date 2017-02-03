@@ -263,11 +263,11 @@ dqlevel=${dq_loglevel}
     mode   => '0777',
   }
   file { '/etc/init.d/watchpushd':
-    ensure => 'present',
+    ensure  => 'present',
     replace => true,
-    source => 'puppet:///modules/tada/watchpushd',
-    owner  => 'tada',
-    mode   => '0777',
+    source  => 'puppet:///modules/tada/watchpushd',
+    owner   => 'tada',
+    mode    => '0777',
   }
   # Not sure if firewall mods needed for dqsvcpop???
   firewall { '000 allow dqsvcpop':
@@ -280,13 +280,13 @@ dqlevel=${dq_loglevel}
 
   file_line { 'config_inotify_instances':
     ensure => present,
-    path   => '/etc/syctl.conf',
+    path   => '/etc/sysctl.conf',
     match  => '^fs.inotify.max_user_instances\ \=',
     line   => "fs.inotify.max_user_instances = $inotify_instances",
   }
   file_line { 'config_inotify_watches':
     ensure => present,
-    path   => '/etc/syctl.conf',
+    path   => '/etc/sysctl.conf',
     match  => '^fs.inotify.max_user_watches\ \=',
     line   => "fs.inotify.max_user_watches = $inotify_watches",
   }
@@ -359,7 +359,8 @@ dqlevel=${dq_loglevel}
   }
 
   ###########################################################################
-  ### irods: only needed for valley but ok for mountain too; added for "tester" user
+  ### irods: only needed for valley but ok for mountain too;
+  ### added for "tester" user
   ###
   file { '/home/tada/.irods':
     ensure => 'directory',
