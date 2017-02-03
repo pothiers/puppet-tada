@@ -276,6 +276,19 @@ dqlevel=${dq_loglevel}
     action  => 'accept',
   }
 
+  file_line { 'inotify_config_instances':
+    ensure => present,
+    path   => '/etc/syctl.conf',
+    match  => '^fs.inotify.max_user_instances\ \=',
+    line   => 'fs.inotify.max_user_instances = 512',
+  }
+  file_line { 'inotify_config_watches':
+    ensure => present,
+    path   => '/etc/syctl.conf',
+    match  => '^fs.inotify.max_user_watches\ \=',
+    line   => 'fs.inotify.max_user_watches = 1048576',
+  }
+
   ## Use "ssh -t" instead?
 #!  file_line { 'disable_requiretty':
 #!    path  => '/etc/sudoers',
