@@ -19,6 +19,8 @@ class tada::config (
   $udp_recv_channel   = hiera('udp_recv_channel'),
   $udp_send_channel   = hiera('udp_send_channel'),
   $tcp_accept_channel = hiera('tcp_accept_channel'),
+  $inotify_instances  = hiera('inotify_instances', '512'),
+  $inotify_watches    = hiera('inotify_watches', '1048576'),
 
   # Use these to install a yaml file that TADA can use to get underlying values
   $dq_host             = hiera('dq_host'),
@@ -276,17 +278,17 @@ dqlevel=${dq_loglevel}
     action  => 'accept',
   }
 
-  file_line { 'inotify_config_instances':
+  file_line { 'config_inotify_instances':
     ensure => present,
     path   => '/etc/syctl.conf',
     match  => '^fs.inotify.max_user_instances\ \=',
-    line   => 'fs.inotify.max_user_instances = 512',
+    line   => "fs.inotify.max_user_instances = $inotify_instances",
   }
-  file_line { 'inotify_config_watches':
+  file_line { 'config_inotify_watches':
     ensure => present,
     path   => '/etc/syctl.conf',
     match  => '^fs.inotify.max_user_watches\ \=',
-    line   => 'fs.inotify.max_user_watches = 1048576',
+    line   => "fs.inotify.max_user_watches = $inotify_watches",
   }
 
   ## Use "ssh -t" instead?
