@@ -63,9 +63,10 @@ class tada::install (
     command => "/bin/bash -c 'source /opt/tada/venv/bin/activate; /opt/tada/venv/bin/python3 setup.py install --force'",
     creates => '/opt/tada/venv/bin/direct_submit',
     user    => 'tada',
+    notify  => [Service['watchpushd'], Service['dqd'], ],
     subscribe => [
       Vcsrepo['/opt/tada'], 
-      File['/opt/tada/venv'],
+      File['/opt/tada/venv', '/etc/tada/hiera.yaml'],
       Python::Requirements['/opt/tada/requirements.txt'],
     ],
   } 
@@ -76,6 +77,7 @@ class tada::install (
     user    => 'tada',
     notify  => [Service['watchpushd'], Service['dqd'], ],
     subscribe => [
+      Vcsrepo['/opt/data-queue'], 
       File['/opt/tada/venv', '/etc/tada/hiera.yaml'],
       Python::Requirements['/opt/tada/requirements.txt'],
     ],
