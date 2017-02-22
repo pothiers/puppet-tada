@@ -60,7 +60,7 @@ class tada::install (
   # These install tada,dataq from source in /opt/tada,data-queue
   exec { 'install tada':
     cwd     => '/opt/tada',
-    command => "/bin/bash -c '/opt/tada/venv/bin/activate; /opt/tada/venv/bin/python3 setup.py install --force; installTadaTables'",
+    command => '/bin/bash -c /opt/tada/scripts/tada-valley-install.sh',
     creates => '/opt/tada/venv/bin/direct_submit',
     user    => 'tada',
     notify  => [Service['watchpushd'], Service['dqd'], ],
