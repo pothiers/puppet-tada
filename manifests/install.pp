@@ -57,7 +57,7 @@ class tada::install (
   -> Package<| provider == 'yum' |>
 
 
-  # These install tada,dataq from source in /opt/tada,data-queue
+  # These install tada,dataq,dart from source in /opt/tada,data-queue,dart
   exec { 'install tada':
     cwd     => '/opt/tada',
     #!command => "/bin/bash -c 'source /opt/tada/venv/bin/activate; /opt/tada/venv/bin/python3 setup.py install --force'",
@@ -83,6 +83,17 @@ class tada::install (
       Python::Requirements['/opt/tada/requirements.txt'],
     ],
   }
+  exec { 'install dart':
+    cwd     => '/opt/dart',
+    command => "/bin/bash -c 'source /opt/tada/venv/bin/activate; /opt/tada/venv/bin/python3 setup.py install --force'",
+    creates => '/opt/tada/venv/bin/delete_archived_fits',
+    user    => 'tada',
+    subscribe => [
+      Vcsrepo['/opt/dart'], 
+      File['/opt/tada/venv'],
+      Python::Requirements['/opt/dart/requirements.txt'],
+    ],
+  }
 
   class { 'python' :
     version    => 'python35u',
@@ -95,6 +106,12 @@ class tada::install (
     ensure => 'link',
     target => '/usr/bin/python3.5',
     } ->
+  python::requirements  { '/opt/dart/requirements.txt':
+    virtualenv => '/opt/tada/venv',
+    owner      => 'tada',
+    group      => 'tada',
+    require    => [ User['tada'], Vcsrepo['/opt/dart'], ],
+  }->
   python::pyvenv  { '/opt/tada/venv':
     version  => '3.5',
     owner    => 'tada',
@@ -106,8 +123,8 @@ class tada::install (
     owner      => 'tada',
     group      => 'tada',
     require    => [ User['tada'], ],
- }->
- python::pip { 'pylint' :
+  }->
+  python::pip { 'pylint' :
    pkgname    => 'pylint',
    ensure     => 'latest',
    virtualenv => '/opt/tada/venv',   
@@ -126,7 +143,20 @@ class tada::install (
     version           => '2.8.19',
     redis_max_memory  => '1gb',
   }
-  
+
+  # DEBUGGING.  REMOVE THIS!!! D
+  # Does not work either
+#!  vcsrepo { '/opt/dmo-hiera' :
+#!    ensure   => latest,
+#!    provider => git,
+#!    source   => 'git@bitbucket.org:noao/dmo-hiera.git',
+#!    revision => 'master',
+#!    owner    => 'tada', # 'tester', # 'tada',
+#!    group    => 'tada',
+#!    require  => User['tada'],
+#!    notify   => Exec['install dart'],
+#!    }
+
   vcsrepo { '/opt/tada-cli' :
     ensure   => latest,
     provider => git,
@@ -142,7 +172,21 @@ class tada::install (
     managehome => true,
     password   => '$1$Pk1b6yel$tPE2h9vxYE248CoGKfhR41',  # tada"Password"
     system     => true,
-    } 
+    } ->
+  file { '/home/tada/.ssh':
+      ensure  => directory,
+      mode    => '0700',
+      } ->
+  file { '/home/tada/.ssh/id_rsa':
+    ensure  => 'present',
+    mode    => '0600',
+    source  => 'puppet:///modules/dmo-hiera/tada_id_rsa',
+    } ->
+  file { '/home/tada/.ssh/id_rsa.pub':
+    ensure  => 'present',
+    mode    => '0644',
+    source  => 'puppet:///modules/dmo-hiera/tada_id_rsa.pub',
+  }
   user { 'tester' :
     ensure     => 'present',
     comment    => 'For running TADA related tests',
@@ -151,6 +195,19 @@ class tada::install (
     groups     => ['tada'],
     system     => false,
   } 
+  vcsrepo { '/opt/dart' :
+    ensure   => latest,
+    provider => git,
+    #!source   => 'https://pothier@bitbucket.org/noao/dart.git',
+    #!source   => 'https://github.com/NOAO/dart.git',
+    source   => 'git@github.com:NOAO/dart.git',
+    revision => 'master',
+    owner    => 'tada', # 'tester', # 'tada',
+    group    => 'tada',
+    identity => '/home/tada/.ssh/id_rsa',
+    require  => User['tada'],
+    notify   => Exec['install dart'],
+    }
   vcsrepo { '/opt/tada' :
     ensure   => latest,
     provider => git,
