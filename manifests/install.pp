@@ -106,12 +106,6 @@ class tada::install (
     ensure => 'link',
     target => '/usr/bin/python3.5',
     } ->
-  python::requirements  { '/opt/dart/requirements.txt':
-    virtualenv => '/opt/tada/venv',
-    owner      => 'tada',
-    group      => 'tada',
-    require    => [ User['tada'], Vcsrepo['/opt/dart'], ],
-  }->
   python::pyvenv  { '/opt/tada/venv':
     version  => '3.5',
     owner    => 'tada',
@@ -123,6 +117,12 @@ class tada::install (
     owner      => 'tada',
     group      => 'tada',
     require    => [ User['tada'], ],
+    }->
+  python::requirements  { '/opt/dart/requirements.txt':
+    virtualenv => '/opt/tada/venv',
+    owner      => 'tada',
+    group      => 'tada',
+    require    => [ User['tada'], Vcsrepo['/opt/dart'] ],
   }->
   python::pip { 'pylint' :
    pkgname    => 'pylint',
@@ -195,6 +195,16 @@ class tada::install (
     groups     => ['tada'],
     system     => false,
   } 
+  vcsrepo { '/opt/tada' :
+    ensure   => latest,
+    provider => git,
+    source   => 'https://github.com/pothiers/tada.git',
+    revision => "${tadaversion}",
+    owner    => 'tada', # 'tester', # 'tada',
+    group    => 'tada',
+    require  => User['tada'],
+    notify   => Exec['install tada'],
+    } ->
   vcsrepo { '/opt/dart' :
     ensure   => latest,
     provider => git,
@@ -207,16 +217,6 @@ class tada::install (
     identity => '/home/tada/.ssh/id_rsa',
     require  => User['tada'],
     notify   => Exec['install dart'],
-    }
-  vcsrepo { '/opt/tada' :
-    ensure   => latest,
-    provider => git,
-    source   => 'https://github.com/pothiers/tada.git',
-    revision => "${tadaversion}",
-    owner    => 'tada', # 'tester', # 'tada',
-    group    => 'tada',
-    require  => User['tada'],
-    notify   => Exec['install tada'],
     } ->
   file { '/opt/tada/tests/smoke':
       ensure  => directory,
