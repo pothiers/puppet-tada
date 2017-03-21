@@ -58,18 +58,6 @@ class tada::install (
 
 
   # These install tada,dataq,dart from source in /opt/tada,data-queue,dart
-  exec { 'install tada':
-    cwd          => '/opt/tada',
-    command      => "/bin/bash -c /opt/tada/scripts/tada-valley-install.sh",
-    refreshonly  => true,
-    user         => 'tada',
-    notify       => [Service['watchpushd'], Service['dqd'], ],
-    subscribe    => [
-                     Vcsrepo['/opt/tada'], 
-                     File['/opt/tada/venv', '/etc/tada/hiera.yaml'],
-                     Python::Requirements['/opt/tada/requirements.txt'],
-                     ],
-  } 
   exec { 'install dataq':
     cwd     => '/opt/data-queue',
     command => "/bin/bash -c 'source /opt/tada/venv/bin/activate; /opt/tada/venv/bin/python3 setup.py install --force'",
@@ -81,7 +69,21 @@ class tada::install (
       File['/opt/tada/venv', '/etc/tada/hiera.yaml'],
       Python::Requirements['/opt/tada/requirements.txt'],
     ],
-  }
+  } ->
+  exec { 'install tada':
+    cwd          => '/opt/tada',
+    command      => "/bin/bash -c /opt/tada/scripts/tada-valley-install.sh",
+    refreshonly  => true,
+    logoutput    => true,
+    #!user         => 'tada',
+    notify       => [Service['watchpushd'], Service['dqd'], ],
+    subscribe    => [
+                     Vcsrepo['/opt/tada'], 
+                     File['/opt/tada/venv'], 
+                     File['/etc/tada/hiera.yaml'],
+                     Python::Requirements['/opt/tada/requirements.txt'],
+                     ],
+  } ->
   exec { 'install dart':
     cwd     => '/opt/dart',
     command => "/bin/bash -c 'source /opt/tada/venv/bin/activate; /opt/tada/venv/bin/python3 setup.py install --force'",
