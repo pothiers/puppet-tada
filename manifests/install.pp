@@ -60,7 +60,7 @@ class tada::install (
   # These install tada,dataq,dart from source in /opt/tada,data-queue,dart
   exec { 'install dataq':
     cwd     => '/opt/data-queue',
-    command => "/bin/bash -c  /opt/tada/scripts/dataq-valley-install.sh",
+    command => "/bin/bash -c  /opt/dataq/scripts/dataq-valley-install.sh",
     #creates => '/opt/tada/venv/bin/dqsvcpop',
     #user    => 'tada',
     notify  => [Service['watchpushd'], Service['dqd'], ],
