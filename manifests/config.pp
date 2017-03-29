@@ -140,6 +140,13 @@ class tada::config (
     mode    => '0400',
     source  => "${rsyncpwd}",
   }
+  file { '/home/tester/activate':
+    ensure  => 'present',
+    replace => false,
+    owner   => 'tester',
+    mode    => '0555',
+    content => "source /opt/tada/venv/bin/activate",
+  }
   file { ['/var/log/tada/pop.log', '/var/log/tada/pop-detail.log']:
     ensure  => 'present',
     replace => false,
