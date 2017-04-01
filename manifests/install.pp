@@ -86,9 +86,9 @@ class tada::install (
   } ->
   exec { 'install dart':
     cwd     => '/opt/dart',
-    command => "/bin/bash -c 'source /opt/tada/venv/bin/activate; /opt/tada/venv/bin/python3 setup.py install --force'",
+    command      => "/bin/bash -c /opt/dart/scripts/dart-valley-install.sh",
     creates => '/opt/tada/venv/bin/delete_archived_fits',
-    user    => 'tada',
+    #~user    => 'tada',
     subscribe => [
       Vcsrepo['/opt/dart'], 
       File['/opt/tada/venv'],
