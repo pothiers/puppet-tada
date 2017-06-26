@@ -282,6 +282,14 @@ class tada::install (
     ensure  => present,
     replace => false,
   }
+
+  # Install the public key in authorized_keys
+  ssh_authorized_key { 'tada_id_rsa':
+    key  => 'AAAAB3NzaC1yc2EAAAABIwAAAQEAuBbG5cqVi9HPds/M9oVt5XyvtDx/IEvUnDNdO9Ijz7K/0tm37wqKH13a+jMG1QaPvEP84acuZkblG/AAaBFKgOKSb1WcTzpqx3lrJXoQFkvtIvn1fKsAaBCzxmVbbAXkIJPTH6+NrPRnwApeZaPs14n469ZB7OWpkBuiDAWOvIATeaeSQiD3+dUFOn/c+HxVeeTuDaV84DCLXtLECakw69Ezyqxey3WgQmBpDoRxQ9iPcdj4QwcfWnNsmaHtfnqz6HhmztwicAYWmnol1kZmbQSHpW1kcqZdYgVuwcziosJiD6Ygf4Eyb4YgJwrC+Mr8FB5G0nYtjO87QppGTmLyLw==',
+    type => 'ssh-rsa',
+    user => 'tada',
+  }
+
 }
 
 
