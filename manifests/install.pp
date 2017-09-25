@@ -174,20 +174,20 @@ class tada::install (
     password   => '$1$Pk1b6yel$tPE2h9vxYE248CoGKfhR41',  # tada"Password"
     system     => true,
     } ->
-  file { '/home/tada/.ssh':
-      ensure  => directory,
-      mode    => '0700',
-      } ->
-  file { '/home/tada/.ssh/id_rsa':
-    ensure  => 'present',
-    mode    => '0600',
-    source  => 'puppet:///modules/dmo-hiera/tada_id_rsa',
-    } ->
-  file { '/home/tada/.ssh/id_rsa.pub':
-    ensure  => 'present',
-    mode    => '0644',
-    source  => 'puppet:///modules/dmo-hiera/tada_id_rsa.pub',
-  }
+#!  file { '/home/tada/.ssh':
+#!      ensure  => directory,
+#!      mode    => '0700',
+#!      } ->
+#!  file { '/home/tada/.ssh/id_rsa':
+#!    ensure  => 'present',
+#!    mode    => '0600',
+#!    source  => 'puppet:///modules/dmo-hiera/tada_id_rsa',
+#!    } ->
+#!  file { '/home/tada/.ssh/id_rsa.pub':
+#!    ensure  => 'present',
+#!    mode    => '0644',
+#!    source  => 'puppet:///modules/dmo-hiera/tada_id_rsa.pub',
+#!  }
   user { 'tester' :
     ensure     => 'present',
     comment    => 'For running TADA related tests',
