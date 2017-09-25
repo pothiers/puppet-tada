@@ -62,6 +62,8 @@ class tada::install (
     cwd     => '/opt/data-queue',
     command => "/bin/bash -c  /opt/data-queue/scripts/dataq-valley-install.sh",
     #creates => '/opt/tada/venv/bin/dqsvcpop',
+    refreshonly  => true,
+    logoutput    => true,
     #user    => 'tada',
     notify  => [Service['watchpushd'], Service['dqd'], ],
     subscribe => [
