@@ -173,7 +173,7 @@ class tada::install (
     managehome => true,
     password   => '$1$Pk1b6yel$tPE2h9vxYE248CoGKfhR41',  # tada"Password"
     system     => true,
-    } ->
+    } #! ->
 #!  file { '/home/tada/.ssh':
 #!      ensure  => directory,
 #!      mode    => '0700',
