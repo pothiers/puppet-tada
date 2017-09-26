@@ -208,19 +208,19 @@ class tada::install (
     require  => User['tada'],
     notify   => Exec['install tada'],
     } ->
-  vcsrepo { '/opt/dart' :
-    ensure   => latest,
-    provider => git,
-    #!source   => 'https://pothier@bitbucket.org/noao/dart.git',
-    #!source   => 'https://github.com/NOAO/dart.git',
-    source   => 'git@github.com:NOAO/dart.git',
-    revision => 'master',
-    owner    => 'tada', # 'tester', # 'tada',
-    group    => 'tada',
-    identity => '/home/tada/.ssh/id_rsa',
-    require  => User['tada'],
-    notify   => Exec['install dart'],
-    } ->
+#!  vcsrepo { '/opt/dart' :
+#!    ensure   => latest,
+#!    provider => git,
+#!    #!source   => 'https://pothier@bitbucket.org/noao/dart.git',
+#!    #!source   => 'https://github.com/NOAO/dart.git',
+#!    source   => 'git@github.com:NOAO/dart.git',
+#!    revision => 'master',
+#!    owner    => 'tada', # 'tester', # 'tada',
+#!    group    => 'tada',
+#!    identity => '/home/tada/.ssh/id_rsa',
+#!    require  => User['tada'],
+#!    notify   => Exec['install dart'],
+#!    } ->
   file { '/opt/tada/tests/smoke':
       ensure  => directory,
       mode    => '0774',
