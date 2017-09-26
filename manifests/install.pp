@@ -85,18 +85,18 @@ class tada::install (
                      File['/etc/tada/hiera.yaml'],
                      Python::Requirements['/opt/tada/requirements.txt'],
                      ],
-  } ->
-  exec { 'install dart':
-    cwd     => '/opt/dart',
-    command      => "/bin/bash -c /opt/dart/scripts/dart-valley-install.sh",
-    creates => '/opt/tada/venv/bin/delete_archived_fits',
-    #~user    => 'tada',
-    subscribe => [
-      Vcsrepo['/opt/dart'], 
-      File['/opt/tada/venv'],
-      Python::Requirements['/opt/dart/requirements.txt'],
-    ],
-  }
+  } #! ->
+  #!exec { 'install dart':
+  #!  cwd     => '/opt/dart',
+  #!  command      => "/bin/bash -c /opt/dart/scripts/dart-valley-install.sh",
+  #!  creates => '/opt/tada/venv/bin/delete_archived_fits',
+  #!  #~user    => 'tada',
+  #!  subscribe => [
+  #!    Vcsrepo['/opt/dart'], 
+  #!    File['/opt/tada/venv'],
+  #!    Python::Requirements['/opt/dart/requirements.txt'],
+  #!  ],
+  #!}
 
   class { 'python' :
     version    => 'python35u',
@@ -121,12 +121,12 @@ class tada::install (
     group      => 'tada',
     require    => [ User['tada'], ],
     }->
-  python::requirements  { '/opt/dart/requirements.txt':
-    virtualenv => '/opt/tada/venv',
-    owner      => 'tada',
-    group      => 'tada',
-    require    => [ User['tada'], Vcsrepo['/opt/dart'] ],
-  }->
+  #!python::requirements  { '/opt/dart/requirements.txt':
+  #!  virtualenv => '/opt/tada/venv',
+  #!  owner      => 'tada',
+  #!  group      => 'tada',
+  #!  require    => [ User['tada'], Vcsrepo['/opt/dart'] ],
+  #!}->
   python::pip { 'pylint' :
    pkgname    => 'pylint',
    ensure     => 'latest',
