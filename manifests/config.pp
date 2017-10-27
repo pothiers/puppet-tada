@@ -430,7 +430,7 @@ dqlevel=${dq_loglevel}
   
   file { '/etc/logrotate.d/tada':
     ensure  => 'present',
-    replace => false,
+    replace => true,
     source  => 'puppet:///modules/tada/tada.logrotate',
   }
 
