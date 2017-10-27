@@ -6,6 +6,12 @@
     rotate 5
 }
 
+/var/log/tada/*-detail.log {
+    compress
+    size 150M
+    rotate 5
+}
+
 /var/log/tada/*.err {
     compress
     size 10k
