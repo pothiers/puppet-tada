@@ -147,18 +147,6 @@ class tada::install (
     redis_max_memory  => '1gb',
   }
 
-  # DEBUGGING.  REMOVE THIS!!! D
-  # Does not work either
-#!  vcsrepo { '/opt/dmo-hiera' :
-#!    ensure   => latest,
-#!    provider => git,
-#!    source   => 'git@bitbucket.org:noao/dmo-hiera.git',
-#!    revision => 'master',
-#!    owner    => 'tada', # 'tester', # 'tada',
-#!    group    => 'tada',
-#!    require  => User['tada'],
-#!    notify   => Exec['install dart'],
-#!    }
 
   vcsrepo { '/opt/tada-cli' :
     ensure   => latest,
@@ -183,12 +171,12 @@ class tada::install (
 #!  file { '/home/tada/.ssh/id_rsa':
 #!    ensure  => 'present',
 #!    mode    => '0600',
-#!    source  => 'puppet:///modules/dmo-hiera/tada_id_rsa',
+#!    source  => 'puppet:///modules/dmo_hiera/tada_id_rsa',
 #!    } ->
 #!  file { '/home/tada/.ssh/id_rsa.pub':
 #!    ensure  => 'present',
 #!    mode    => '0644',
-#!    source  => 'puppet:///modules/dmo-hiera/tada_id_rsa.pub',
+#!    source  => 'puppet:///modules/dmo_hiera/tada_id_rsa.pub',
 #!  }
   user { 'tester' :
     ensure     => 'present',
